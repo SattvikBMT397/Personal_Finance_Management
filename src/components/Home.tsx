@@ -1,23 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Images from './Logo/Budget Buddy.png';
 import MobileImage from "./Logo/mobile.png";
-import '../App.css';
+import './Home.css';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate('/login');
+  }
+
+  const handleRegister = () => {
+    navigate('/signup')
+  }
   return (
     <div className='main' style={{ background: 'linear-gradient(180deg, rgba(40, 161, 151, 0.03) 0%, rgba(15, 59, 55, 0.03) 100%)' }}>
       <div className="containers">
         <img src={Images} alt='Myimages' className="logo" />
         <div className='main_middle'>
-  <h2><Link to="/" className="navLink">Home</Link></h2>
-  <h2><Link to="/contactus" className="navLink">Contact Us</Link></h2>
-  <h2><Link to="/OurTeams" className="navLink">Our Teams</Link></h2>
-</div>
+          <h2><Link to="/" className="navLink">Home</Link></h2>
+          <h2><Link to="/contactus" className="navLink">Contact Us</Link></h2>
+          <h2><Link to="/OurTeams" className="navLink">Our Teams</Link></h2>
+        </div>
 
         <div className='header_end'>
-          <button className='btn2'>Login</button>
-          <button className='btn2'>Register </button>
+          <button onClick={handleLogin} className='btn2'>Login</button>
+          <button onClick={handleRegister} className='btn2'>Register </button>
         </div>
       </div>
       <div className='secondMiddle'>
