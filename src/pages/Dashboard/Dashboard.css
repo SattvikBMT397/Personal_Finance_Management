@@ -1,0 +1,33 @@
+/* Example CSS */
+.sidebar-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #f0f0f0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.hamburger-icon {
+    display: none;
+    /* Initially hide on larger screens */
+    cursor: pointer;
+    padding: 10px;
+    font-size: 20px;
+    z-index: 1100;
+    /* Higher than sidebar for overlay effect */
+}
+
+@media (max-width: 768px) {
+    .hamburger-icon {
+        display: block;
+        /* Display on smaller screens */
+    }
+
+    .sidebar-container {
+        display: none;
+        /* Hide sidebar on smaller screens by default */
+    }
+}
