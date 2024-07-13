@@ -236,14 +236,7 @@ i {
     justify-content: center;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 2px;
-    margin: 4px 0;
-    border: none;
-    border-bottom: 2px solid black;
-    outline: none;
-}
+
 
 input:focus {
     outline: none;
