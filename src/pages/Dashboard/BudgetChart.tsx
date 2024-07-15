@@ -52,7 +52,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
         }
     }, [expenses]);
 
-    return <canvas style={{marginTop:'27%',marginBottom:'38%'}}  ref={canvasRef} />;
+    return <canvas style={{marginTop:'27%',marginBottom:'40%'}}  ref={canvasRef} />;
 };
 
 export default BudgetChart;

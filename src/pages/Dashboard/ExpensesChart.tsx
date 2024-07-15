@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { expenses } from '../../dummyData';
-
 interface Expense {
     category: string;
     amount: number;
