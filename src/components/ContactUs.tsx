@@ -1,66 +1,127 @@
-import '../App.css';
 import Footer from './Footer';
+import { styled } from '@mui/system';
+import { Container, Box, Typography, Button, TextField } from '@mui/material';
+import { Email, Phone, LocationOn, Send } from '@mui/icons-material';
+
+const StyledContainer = styled(Container)({
+  background: 'linear-gradient(180deg, #28A197 0%, #0F3B37 100%)',
+  padding: '4rem 2rem',
+  borderRadius: '8px',
+  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+  color: 'white',
+});
+
+const Heading = styled(Typography)({
+  fontWeight: 'bold',
+  textAlign: 'center',
+  marginBottom: '2rem',
+  color: '#ffffff',
+});
+
+const ContactInfo = styled(Box)({
+  padding: '1rem',
+  '& p': {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    fontSize: '1.1rem',
+  },
+  '& svg': {
+    marginRight: '0.5rem',
+    color: '#5DEBD7',
+  },
+});
+
+const WhiteBackgroundBox = styled(Box)({
+  backgroundColor: 'white',
+  padding: '1rem',
+  borderRadius: '8px',
+  color: '#0F3B37',
+  marginBottom: '2rem',
+});
+
+const ContactForm = styled(Box)({
+  padding: '1rem',
+  '& button': {
+    marginTop: '1rem',
+  },
+});
+
+const StyledButton = styled(Button)({
+  backgroundColor: '#5DEBD7',
+  color: 'white',
+  '&:hover': {
+    backgroundColor: '#4ac6b2',
+  },
+});
+
+const CustomTextField = styled(TextField)({
+  '& .MuiInputBase-root': {
+    color: 'white',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#5DEBD7',
+    },
+    '&:hover fieldset': {
+      borderColor: '#4ac6b2',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#5DEBD7',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: '#5DEBD7',
+  },
+});
 
 const ContactUsPage = () => {
   return (
     <>
-      <div className="App">
-        <h1 className="text-center heading">Contact Us</h1>
-        <div className="container text-start">
-          <div className="row">
-            <div className="col-6 p-5 g-col-6">
-              <div className="descriptionss">
-                <div className="text1">Let's discuss</div>
-                <div>
-                  on something <span style={{ color: '#5DEBD7' }}>cool</span> 
-                  <div>together</div>
-                </div>
-              </div>
-              <br /><br />
-              <p>
-                <i className="fa-solid fa-envelope"></i> SaulDesign@gmail.com
-              </p>
-              <p>
-                <i className="fa-solid fa-phone"></i> +123456789
-              </p>
-              <p>
-                <i className="fa-solid fa-location-dot"></i> 123 Street 456 House
-              </p>
-            </div>
-            <div className="col-6 p-5 g-col-6">
-              <p>I'm interested in...</p>
-              <button className="btn1 m-2">Be partner</button>
-              <button className="btn1 m-2">Advertise</button>
-              <button className="btn1 m-2">Complaint</button>
-              <button className="btn1 m-2">Careers</button>
-              <button className="btn1 m-2">Other</button>
-              <input
-                className="form-control form-control-sm mt-3"
-                type="text"
+      <StyledContainer>
+        <Heading variant="h4">Contact Us</Heading>
+        <Container maxWidth="md">
+          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }}>
+            <ContactInfo flex={1}>
+              <WhiteBackgroundBox>
+                <Typography variant="h6">Let's discuss something <span style={{ color: '#5DEBD7' }}>cool</span> together</Typography>
+              </WhiteBackgroundBox>
+              <p><Email /> SaulDesign@gmail.com </p>
+              <p><Phone /> +123456789</p>
+              <p><LocationOn /> 123 Street 456 House</p>
+            </ContactInfo>
+            <ContactForm flex={1}>
+              <Typography variant="h6">I'm interested in...</Typography>
+              <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Be Partner</Button>
+              <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Advertise</Button>
+              <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Complaint</Button>
+              <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Careers</Button>
+              <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Other</Button>
+              <CustomTextField
+                fullWidth
+                variant="outlined"
+                margin="normal"
                 placeholder="Your name"
-                aria-label=".form-control-sm example"
               />
-              <input
-                className="form-control form-control-sm mt-3"
-                type="text"
+              <CustomTextField
+                fullWidth
+                variant="outlined"
+                margin="normal"
                 placeholder="Your email"
-                aria-label="default input example"
               />
-              <input
-                className="form-control form-control-sm mt-3"
-                type="text"
+              <CustomTextField
+                fullWidth
+                variant="outlined"
+                margin="normal"
                 placeholder="Your message"
-                aria-label=".form-control-sm example"
+                multiline
+                rows={4}
               />
-              <div className="wrapper">
-                <button className="btn21 m-4">
-                  <i className="fa-solid fa-paper-plane"></i>&nbsp;Send Message
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <StyledButton variant="contained" startIcon={<Send />}>Send Message</StyledButton>
+            </ContactForm>
+          </Box>
+        </Container>
+      </StyledContainer>
       <Footer />
     </>
   );
