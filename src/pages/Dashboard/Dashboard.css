@@ -1,33 +1,39 @@
-/* Example CSS */
-.sidebar-container {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    background-color: #f0f0f0;
-    overflow-y: auto;
-    z-index: 1000;
-}
-
-.hamburger-icon {
-    display: none;
-    /* Initially hide on larger screens */
-    cursor: pointer;
+.dashboard-container {
     padding: 10px;
-    font-size: 20px;
-    z-index: 1100;
-    /* Higher than sidebar for overlay effect */
+    background-color: #f5f5f5;
+    min-height: 100vh;
 }
 
-@media (max-width: 768px) {
-    .hamburger-icon {
-        display: block;
-        /* Display on smaller screens */
-    }
-
-    .sidebar-container {
-        display: none;
-        /* Hide sidebar on smaller screens by default */
-    }
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
 }
+
+.dashboard-title {
+    color: #353333;
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.chart-paper {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.chart-paper h2 {
+    margin-bottom: 16px;
+    color: #444;
+}
+
+.dashboard-main {
+    position: relative;
+    padding: 20px;
+}
+
+
