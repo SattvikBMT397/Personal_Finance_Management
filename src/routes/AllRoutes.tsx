@@ -7,6 +7,7 @@ import ContactUsPage from '../components/ContactUs'
 import OurTeams from '../components/OurTeams'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Budget from '../pages/Budget/Budget'
+import AddTransaction from '../pages/Transaction/AddTransaction'
 
 const AllRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const AllRoutes = () => {
           <Route path="/OurTeams" element={<OurTeams />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-budget" element={<Budget />} />
+          <Route path="/add-transaction" element={<AddTransaction />} />
     </Routes>
 </Router>
 </>

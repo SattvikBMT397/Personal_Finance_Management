@@ -278,7 +278,6 @@ input[type="password"] {
   border-radius: 2px;
   margin: 4px 0;
   border: none;
-  border-bottom: 2px solid black;
   outline: none;
 }
 
