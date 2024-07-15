@@ -1,21 +1,21 @@
 import React from 'react';
-import {
-  Container,
-  Typography,
-  Button,
-  TextField,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  Paper,
-  Snackbar,
-  Alert,
-  SelectChangeEvent
-} from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import Paper from '@mui/material/Paper';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import background from '../../src/components/Logo/bg.jpg';
+import background from '../../components/Logo/bg.jpg';
+import { useDispatch } from 'react-redux';
+import { addTranscation } from '../../redux/authSlice';
 
 const theme = createTheme({
   palette: {
@@ -100,6 +100,7 @@ const categories = {
 type CategoryType = keyof typeof categories;
 
 const AddTransaction = () => {
+  const dispatch = useDispatch();
   const [category, setCategory] = React.useState('');
   const [type, setType] = React.useState<CategoryType>('expense');
   const [cost, setCost] = React.useState('');
@@ -124,13 +125,18 @@ const AddTransaction = () => {
     setDate(event.target.value);
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission
-    console.log('Category:', category);
-    console.log('Type:', type);
-    console.log('Cost:', cost);
-    console.log('Date:', date);
+  const handleSubmit= () => {
+    const transaction = {
+      type,
+      category,
+      cost: parseFloat(cost), // Convert cost to a number
+      date: new Date(date), // Convert date to a Date object
+    };
 
+    // Dispatch the addTranscation action
+    dispatch(addTranscation(transaction));
+
+    // Show snackbar message
     setSnackbarMessage('Transaction added successfully!');
     setSnackbarOpen(true);
   };
