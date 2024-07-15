@@ -1,10 +1,10 @@
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import AllRoutes from './routes/AllRoutes';
-
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import AllRoutes from './routes/AllRoutes'; 
 
 function App() {
   return (
-   <AllRoutes/>
+   
+       <AllRoutes /> 
   );
 }
 
