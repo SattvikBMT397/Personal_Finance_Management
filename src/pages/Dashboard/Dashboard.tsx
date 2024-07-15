@@ -22,7 +22,6 @@ const Dashboard: React.FC = () => {
         setShowMenuIcon(!isOpen);
     }, [isOpen]);
 
-    // Convert expenses to match the expected type for BudgetChart
     const convertedExpenses = expenses.map(expense => ({
         ...expense,
         amount: expense.amount.toString()
@@ -47,8 +46,7 @@ const Dashboard: React.FC = () => {
                         </IconButton>
                     )}
                     <h1 className="dashboard-title">Dashboard</h1>
-                </div>
-                <Grid container spacing={3} className="dashboard-content">
+     <Grid container spacing={3} className="dashboard-content">
                     <Grid item xs={12} sm={6} md={4}>
                         <Paper className="chart-paper">
                             <h2>Income</h2>
