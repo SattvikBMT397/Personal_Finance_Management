@@ -2,17 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import localforage from 'localforage';
-import {
-    Card,
-    CardHeader,
-    CardContent,
-    CardActions,
-    Typography,
-    Container,
-    Link,
-    Grid,
-    Avatar,
-} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
@@ -26,6 +24,8 @@ import { UserData } from '../../utils/Interface/types';
 const LoginForm = () => {
     const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
     const { handleSubmit, control, formState: { errors } } = useForm({
@@ -33,18 +33,30 @@ const LoginForm = () => {
     });
 
     const onSubmit = async (data: UserData) => {
+        setLoading(true);
         setSubmitting(true);
-        try {
-            await dispatch(login(data)); // Dispatch login action
-            localforage.setItem('userStatus', 'loggedIn');
-            // Redirect or navigate after successful login
-            // Example: replace with actual navigation logic
-            navigate('/profile')
-        } catch (error) {
-            console.error('Login error:', error);
-        } finally {
-            setSubmitting(false);
-        }
+        setTimeout(async () => {
+            try {
+                const users: UserData[] = await localforage.getItem<UserData[]>('users') || [];
+                const authenticated = users.find(u => u.email === data.email && u.password === data.password);
+
+                if (authenticated) {
+                    dispatch(login(authenticated));
+                    localforage.setItem('currentUser', authenticated);
+                    navigate("/dashboard");
+                } else {
+                    setError('Invalid Credentials');
+                    console.log(error);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setError('Error fetching user data. Please try again.');
+            } finally {
+                setSubmitting(false);
+                setLoading(false);
+            }
+           
+       },1000)
     };
 
     return (
@@ -89,6 +101,7 @@ const LoginForm = () => {
                             <CommonButton
                                 type="submit"
                                 disabled={submitting}
+                                loading={loading}
                             >
                                 {submitting ? 'Logging in...' : 'Sign in'}
                             </CommonButton>

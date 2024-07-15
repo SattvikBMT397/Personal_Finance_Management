@@ -23,35 +23,46 @@ import CommonButton from '../../components/commonComponent/commonButton';
 const SignupForm = () => {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { handleSubmit, control, formState: { errors } } = useForm({
     resolver: yupResolver(signupSchema),
   });
 
   const onSubmit = async (data: UserData) => {
     setSubmitting(true);
-    try {
-      // Fetch existing user data array from localforage or initialize an empty array
-      let users: UserData[] = await localforage.getItem('users') || [];
+    setLoading(true);
+    setTimeout(async () => {
+      try {
+        // Fetch existing user data array from localforage or initialize an empty array
+        let users: UserData[] = await localforage.getItem('users') || [];
 
-      // Generate ID based on array length
-      const id = (users.length+1).toString(); // You can use a UUID library for more robust IDs
+        // Generate ID based on array length
+        const id = (users.length + 1).toString(); // You can use a UUID library for more robust IDs
 
-      // Add ID to user data
-      const userDataWithId = { ...data, id };
+        // Add ID to user data
+        const userDataWithId: UserData = {
+          ...data,
+          id,
+          budget: [],
+          transaction: [],
+          expenses: []
+        };
 
-      // Add new user data to the array
-      users.push(userDataWithId);
+        // Add new user data to the array
+        users.push(userDataWithId);
 
-      // Store the updated array back in localforage
-      await localforage.setItem('users', users);
+        // Store the updated array back in localforage
+        await localforage.setItem('users', users);
 
-      alert('Signup Successful!');
-      navigate("/login");
-    } catch (error) {
-      console.error('Error storing data:', error);
-    } finally {
-      setSubmitting(false);
-    }
+        alert('Signup Successful!');
+        navigate("/login");
+      } catch (error) {
+        console.error('Error storing data:', error);
+      } finally {
+        setSubmitting(false);
+        setLoading(false);
+      }
+    },1000)
   };
 
   return (
@@ -106,6 +117,7 @@ const SignupForm = () => {
               <CommonButton
                 type="submit"
                 disabled={submitting}
+                loading={loading}
               >
                 {submitting ? 'Submitting...' : 'Sign up'}
               </CommonButton>

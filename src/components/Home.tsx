@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom';
-import '../components/Home.css';
 import { useMediaQuery } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
@@ -9,19 +8,36 @@ import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Images from './Logo/Budget Buddy.png';
 import MobileImage from "./Logo/mobile.png";
+import './Home.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { logout } from '../redux/authSlice';
+
 
 const Home = () => {
   const isMobile = useMediaQuery('(max-width:500px)');
   const isIpad = useMediaQuery('(max-width:769px)');
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+
   const handleLogin = () => {
     navigate('/login');
   };
 
   const handleRegister = () => {
+
     navigate('/signup');
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
+
+  const handleDashboard = () => {
+    navigate('/dashboard');
+  }
 
   return (
     <div className='main' style={{ background: 'linear-gradient(180deg, rgba(40, 161, 151, 0.03) 0%, rgba(15, 59, 55, 0.03) 100%)' }}>
@@ -49,7 +65,16 @@ const Home = () => {
             </Link>
           </h2>
         </div>
-        <div className='header_end'>
+
+        {
+          currentUser ? (
+            <div className='header_end'>
+              <button onClick={handleLogout} className='btn2'>Logout</button>
+              <button onClick={handleDashboard} className='btn2'>Dashboard </button>
+            </div>
+            
+          ): (
+              <div className='header_end'>
           <button onClick={handleLogin} className='btn2'>
             {isMobile || isIpad ? <LoginIcon /> : 'Login'}
           </button>
@@ -57,6 +82,9 @@ const Home = () => {
             {isMobile || isIpad ? <AppRegistrationIcon /> : 'Register'}
           </button>
         </div>
+          )
+        }
+
       </div>
       <div className='secondMiddle'>
         <div className='contents'>
