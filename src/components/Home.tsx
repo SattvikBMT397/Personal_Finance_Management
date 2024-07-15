@@ -31,9 +31,6 @@ const Home = () => {
   const handleLogout = () => {
     dispatch(logout());
   }
-  const handleLogout = () => {
-    dispatch(logout());
-  }
 
   const handleDashboard = () => {
     navigate('/dashboard');
