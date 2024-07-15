@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
 import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
-import { expenses } from '../../dummyData';
+import { expenses } from '../Dashboard/dummyData';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -21,6 +21,11 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         setShowMenuIcon(!isOpen);
     }, [isOpen]);
+
+    const convertedExpenses = expenses.map(expense => ({
+        ...expense,
+        amount: expense.amount.toString()
+    }));
 
     return (
         <Grid container className="dashboard-container">
@@ -41,9 +46,7 @@ const Dashboard: React.FC = () => {
                         </IconButton>
                     )}
                     <h1 className="dashboard-title">Dashboard</h1>
-                </div>
-
-                <Grid container spacing={3} className="dashboard-content">
+     <Grid container spacing={3} className="dashboard-content">
                     <Grid item xs={12} sm={6} md={4}>
                         <Paper className="chart-paper">
                             <h2>Income</h2>
@@ -59,7 +62,7 @@ const Dashboard: React.FC = () => {
                     <Grid item xs={12} sm={6} md={4}>
                         <Paper className="chart-paper">
                             <h2>Budget</h2>
-                            <BudgetChart expenses={expenses} />
+                            <BudgetChart expenses={convertedExpenses} />
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
