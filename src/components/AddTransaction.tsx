@@ -50,7 +50,6 @@ const FullWidthBackground = styled('div')({
   backgroundImage: `url(${background})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  filter: 'blur(3px)',
   zIndex: -1,
 });
 
