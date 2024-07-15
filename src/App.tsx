@@ -1,9 +1,6 @@
-import Home from './components/Home';
-import ContactUsPage from './components/ContactUs';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import OurTeams from './components/OurTeams';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import AddTransaction from './components/AddTransaction';
+import AllRoutes from './routes/AllRoutes';
 
 
 function App() {
@@ -16,6 +13,7 @@ function App() {
         <Route path= "/A" element={<AddTransaction/>}/>
       </Routes>
     </BrowserRouter>
+   <AllRoutes/>
   );
 }
 

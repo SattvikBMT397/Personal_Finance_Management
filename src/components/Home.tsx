@@ -1,7 +1,6 @@
-
-import { Link } from 'react-router-dom';
 import Images from './Logo/Budget Buddy.png';
 import MobileImage from "./Logo/mobile.png";
+ import { Link, useNavigate } from 'react-router-dom';
 import '../components/Home.css';
 import { useMediaQuery } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,7 +13,15 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 const Home = () => {
   const isMobile = useMediaQuery('(max-width:500px)');
   const isIpad = useMediaQuery('(max-width:769px)');
+const Home = () => {
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate('/login');
+  }
 
+  const handleRegister = () => {
+    navigate('/signup')
+  }
   return (
     <div className='main' style={{ background: 'linear-gradient(180deg, rgba(40, 161, 151, 0.03) 0%, rgba(15, 59, 55, 0.03) 100%)' }}>
       <div className="containers">
@@ -48,6 +55,9 @@ const Home = () => {
           <button className='btn2'>
             {(isMobile || isIpad)? <AppRegistrationIcon /> : 'Register'}
           </button>
+        <div className='header_end'>
+          <button onClick={handleLogin} className='btn2'>Login</button>
+          <button onClick={handleRegister} className='btn2'>Register </button>
         </div>
       </div>
       <div className='secondMiddle'>
