@@ -6,6 +6,7 @@ import Home from '../components/Home'
 import ContactUsPage from '../components/ContactUs'
 import OurTeams from '../components/OurTeams'
 import Dashboard from '../pages/Dashboard/Dashboard'
+import Budget from '../pages/Budget/Budget'
 
 const AllRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AllRoutes = () => {
           <Route path="/contactus" element={<ContactUsPage />} />
           <Route path="/OurTeams" element={<OurTeams />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/add-budget" element={<Budget />} />
     </Routes>
 </Router>
 </>

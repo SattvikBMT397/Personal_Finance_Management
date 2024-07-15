@@ -2,15 +2,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import Images from './Logo/Budget Buddy.png';
 import MobileImage from "./Logo/mobile.png";
 import './Home.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { logout } from '../redux/authSlice';
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const handleLogin = () => {
     navigate('/login');
   }
 
   const handleRegister = () => {
     navigate('/signup')
+  }
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
+
+  const handleDashboard = () => {
+    navigate('/dashboard');
   }
   return (
     <div className='main' style={{ background: 'linear-gradient(180deg, rgba(40, 161, 151, 0.03) 0%, rgba(15, 59, 55, 0.03) 100%)' }}>
@@ -22,10 +35,20 @@ const Home = () => {
           <h2><Link to="/OurTeams" className="navLink">Our Teams</Link></h2>
         </div>
 
-        <div className='header_end'>
-          <button onClick={handleLogin} className='btn2'>Login</button>
-          <button onClick={handleRegister} className='btn2'>Register </button>
-        </div>
+        {
+          currentUser ? (
+            <div className='header_end'>
+              <button onClick={handleLogout} className='btn2'>Logout</button>
+              <button onClick={handleDashboard} className='btn2'>Dashboard </button>
+            </div>
+            
+          ): (
+              <div className = 'header_end'>
+          <button onClick = { handleLogin } className = 'btn2'>Login</button>
+      <button onClick={handleRegister} className='btn2'>Register </button>
+    </div>
+          )
+        }
       </div>
       <div className='secondMiddle'>
         <div className='contents'>
