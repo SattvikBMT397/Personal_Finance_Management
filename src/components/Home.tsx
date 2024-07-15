@@ -1,6 +1,4 @@
-import Images from './Logo/Budget Buddy.png';
-import MobileImage from "./Logo/mobile.png";
- import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../components/Home.css';
 import { useMediaQuery } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -9,19 +7,22 @@ import GroupIcon from '@mui/icons-material/Group';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import Images from './Logo/Budget Buddy.png';
+import MobileImage from "./Logo/mobile.png";
 
 const Home = () => {
   const isMobile = useMediaQuery('(max-width:500px)');
   const isIpad = useMediaQuery('(max-width:769px)');
-const Home = () => {
   const navigate = useNavigate();
+
   const handleLogin = () => {
     navigate('/login');
-  }
+  };
 
   const handleRegister = () => {
-    navigate('/signup')
-  }
+    navigate('/signup');
+  };
+
   return (
     <div className='main' style={{ background: 'linear-gradient(180deg, rgba(40, 161, 151, 0.03) 0%, rgba(15, 59, 55, 0.03) 100%)' }}>
       <div className="containers">
@@ -29,7 +30,7 @@ const Home = () => {
         <div className='main_middle'>
           <h2>
             <Link to="/" className="navLink">
-              {isMobile || isIpad? <HomeIcon /> : 'Home'}
+              {isMobile || isIpad ? <HomeIcon /> : 'Home'}
             </Link>
           </h2>
           <h2>
@@ -49,15 +50,12 @@ const Home = () => {
           </h2>
         </div>
         <div className='header_end'>
-          <button className='btn2'>
-            {(isMobile || isIpad) ? <LoginIcon /> : 'Login'}
+          <button onClick={handleLogin} className='btn2'>
+            {isMobile || isIpad ? <LoginIcon /> : 'Login'}
           </button>
-          <button className='btn2'>
-            {(isMobile || isIpad)? <AppRegistrationIcon /> : 'Register'}
+          <button onClick={handleRegister} className='btn2'>
+            {isMobile || isIpad ? <AppRegistrationIcon /> : 'Register'}
           </button>
-        <div className='header_end'>
-          <button onClick={handleLogin} className='btn2'>Login</button>
-          <button onClick={handleRegister} className='btn2'>Register </button>
         </div>
       </div>
       <div className='secondMiddle'>
@@ -71,7 +69,7 @@ const Home = () => {
             <p className='description'>Budget Buddy is here to support you on your journey to financial freedom, offering tips, reminders, and personalized advice along the way.</p>
           </div>
         </div>
-        {!isMobile  && !isIpad && (
+        {!isMobile && !isIpad && (
           <div className='photos1'>
             <img className='MobileImage' src={MobileImage} width={400} height={460} alt='Mobile'></img>
           </div>
