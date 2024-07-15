@@ -13,15 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { logout } from '../redux/authSlice';
 
-
 const Home = () => {
   const isMobile = useMediaQuery('(max-width:500px)');
   const isIpad = useMediaQuery('(max-width:769px)');
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
-
   const handleLogin = () => {
     navigate('/login');
   };
@@ -31,6 +28,9 @@ const Home = () => {
     navigate('/signup');
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+  }
   const handleLogout = () => {
     dispatch(logout());
   }
@@ -84,7 +84,6 @@ const Home = () => {
         </div>
           )
         }
-
       </div>
       <div className='secondMiddle'>
         <div className='contents'>
