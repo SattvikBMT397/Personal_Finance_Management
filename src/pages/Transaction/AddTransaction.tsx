@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import background from '../../components/Logo/bg.jpg';
 import { useDispatch } from 'react-redux';
 import { addTranscation } from '../../redux/authSlice';
+import CommonSidebar from '../../components/commonComponent/commonSidebar';
 
 const theme = createTheme({
   palette: {
@@ -85,10 +86,10 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   color: '#000',
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)(() => ({
   backgroundColor: "#1C8E85",
   '&:hover': {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: "#2ac4b8",
   },
 }));
 
@@ -142,77 +143,80 @@ const AddTransaction = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <FullWidthBackground />
-      <StyledContainer>
-        <StyledTypography variant="h4" gutterBottom>
-          Add Transaction
-        </StyledTypography>
-        <StyledTypography variant="h6" gutterBottom>
-          How Much?
-        </StyledTypography>
-        <StyledTypography variant="h5" gutterBottom>
-          $0.00 {/* Replace this with your logic to show total amount */}
-        </StyledTypography>
-        <StyledPaper elevation={3}>
-          <InputLabel>Type</InputLabel>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={type} onChange={handleTypeChange}>
-              <MenuItem value="expense">Expense</MenuItem>
-              <MenuItem value="income">Income</MenuItem>
-            </Select>
-          </FormControl>
-          <InputLabel>Category</InputLabel>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={category} onChange={handleCategoryChange}>
-              {categories[type].map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Cost"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            type="number"
-            value={cost}
-            onChange={handleCostChange}
-          />
-          <TextField
-            label="Date"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={date}
-            onChange={handleDateChange}
-          />
-          <StyledButton
-            variant="contained"
-            onClick={handleSubmit}
-            sx={{ mt: 2, color: 'white', width: "100%" }}
-          >
-            Submit
-          </StyledButton>
-        </StyledPaper>
-      </StyledContainer>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </ThemeProvider>
+    <>
+      <CommonSidebar/>
+      <ThemeProvider theme={theme}>
+        <FullWidthBackground />
+        <StyledContainer>
+          <StyledTypography variant="h4" gutterBottom>
+            Add Transaction💰
+          </StyledTypography>
+          <StyledTypography variant="h6" gutterBottom>
+            How Much?
+          </StyledTypography>
+          <StyledTypography variant="h5" gutterBottom>
+            $0.00 {/* Replace this with your logic to show total amount */}
+          </StyledTypography>
+          <StyledPaper elevation={3}>
+            <InputLabel>Type</InputLabel>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <Select value={type} onChange={handleTypeChange}>
+                <MenuItem value="expense">Expense</MenuItem>
+                <MenuItem value="income">Income</MenuItem>
+              </Select>
+            </FormControl>
+            <InputLabel>Category</InputLabel>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <Select value={category} onChange={handleCategoryChange}>
+                {categories[type].map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              label="Cost"
+              variant="outlined"
+              fullWidth
+              sx={{ mb: 2 }}
+              type="number"
+              value={cost}
+              onChange={handleCostChange}
+            />
+            <TextField
+              label="Date"
+              variant="outlined"
+              fullWidth
+              sx={{ mb: 2 }}
+              type="date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={date}
+              onChange={handleDateChange}
+            />
+            <StyledButton
+              variant="contained"
+              onClick={handleSubmit}
+              sx={{ mt: 2, color: 'white', width: "100%" }}
+            >
+              Submit
+            </StyledButton>
+          </StyledPaper>
+        </StyledContainer>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </ThemeProvider>
+    </>
   );
 };
 

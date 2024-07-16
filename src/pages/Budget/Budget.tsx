@@ -93,7 +93,7 @@ const AddToBudgetPage: React.FC = () => {
                         </Alert>
                     </Snackbar>
 
-                    <Box
+                    <Box 
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',
                             borderRadius: '8px',
@@ -108,7 +108,7 @@ const AddToBudgetPage: React.FC = () => {
                         }}
                     >
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontStyle: 'italic', color: '#000' }}>
-                            Add to Budget
+                            Add To Wallet💸
                         </Typography>
                         <Select
                             value={category}
@@ -154,7 +154,7 @@ const AddToBudgetPage: React.FC = () => {
                                 disabled={loading}
                                 loading={loading}
                             >
-                                Add Budget
+                                Add Wallet
                             </CommonButton>
                         )}
                         <Box sx={{ maxHeight: 'calc(80vh - 300px)', overflowY: 'auto', marginTop: '10px' }}>
@@ -173,12 +173,12 @@ const AddToBudgetPage: React.FC = () => {
                                             <Grid item>
                                                 <Tooltip title="Edit">
                                                     <IconButton onClick={() => setEditIndex(index)}>
-                                                        <EditIcon />
+                                                        <EditIcon sx={{ color: "black" }} />
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Delete">
                                                     <IconButton onClick={() => handleDeleteBudget(index)}>
-                                                        <DeleteIcon />
+                                                        <DeleteIcon sx={{ color:"#d11a2a"}} />
                                                     </IconButton>
                                                 </Tooltip>
                                             </Grid>

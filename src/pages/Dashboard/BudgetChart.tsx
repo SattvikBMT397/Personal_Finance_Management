@@ -2,10 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { BudgetChartProps } from '../../utils/Interface/types';
 
-interface BudgetChartProps {
-  expenses: { category: string, amount: string }[];
-}
 
 const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -21,13 +19,14 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
       const remainingBudget = budgetData.map(budgetItem => {
         const totalExpenses = expenses
           .filter(expense => expense.category === budgetItem.category)
-          .reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
+          .reduce((acc, expense) => acc + parseFloat(expense.cost.toString()), 0);
         return {
           category: budgetItem.category,
           remaining: parseFloat(budgetItem.amount) - totalExpenses
         };
       });
 
+      // Create a new Chart instance with updated data
       chartRef.current = new Chart(canvasRef.current, {
         type: 'bar',
         data: {
@@ -57,7 +56,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
     };
   }, [expenses, budgetData]);
 
-  return <canvas style={{ marginTop: '27%', marginBottom: '38%' }} ref={canvasRef} />;
+  return <canvas style={{ marginTop: '28%', marginBottom: '39%' }} ref={canvasRef} />;
 };
 
 export default BudgetChart;
