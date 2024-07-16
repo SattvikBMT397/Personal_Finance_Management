@@ -50,7 +50,6 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
         }
       });
     }
-
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
