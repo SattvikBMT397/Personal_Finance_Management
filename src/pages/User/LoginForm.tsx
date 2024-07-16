@@ -42,7 +42,7 @@ const LoginForm = () => {
 
                 if (authenticated) {
                     dispatch(login(authenticated));
-                    localforage.setItem('currentUser', authenticated);
+                    sessionStorage.setItem('currentUser', JSON.stringify(authenticated));
                     navigate("/dashboard");
                 } else {
                     setError('Invalid Credentials');
