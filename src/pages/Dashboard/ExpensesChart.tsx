@@ -77,7 +77,7 @@ const ExpensesChart: React.FC = () => {
             <canvas style={{ marginTop: '28%' }} ref={canvasRef} />
             <div style={{ textAlign: 'center', marginTop: '29%' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={exp} alt="Expense" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+                    <img src={exp} alt="Expense" style={{ width: '40px', height: 'auto', marginRight: 'px' }} />
                     <h3 style={{ margin: '0' }}>Total Expenses: ₹{totalExpenses.toFixed(2)}</h3>
                 </div>
                
