@@ -25,3 +25,18 @@ export interface Transaction {
     cost: number;
     date: Date;
   }
+export interface BudgetChartProps {
+    expenses: {
+        category: string,
+        cost: number,
+        date?: Date,
+        type?: string
+    }[];
+}
+
+export interface Expense {
+    type?: string;
+    category: string;
+    cost: number;
+    date?: Date;
+}

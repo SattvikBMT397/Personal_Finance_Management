@@ -2,13 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { Expense } from '../../utils/Interface/types';
+import exp from "../../components/Logo/expense.png"
 
-interface Expense {
-    type?: string;
-    category: string;
-    cost: number;
-    date?: Date;
-}
 
 const ExpensesChart: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -78,9 +74,13 @@ const ExpensesChart: React.FC = () => {
 
     return (
         <div>
-            <canvas style={{ marginTop: '27%' }} ref={canvasRef} />
+            <canvas style={{ marginTop: '28%' }} ref={canvasRef} />
             <div style={{ textAlign: 'center', marginTop: '29%' }}>
-                <h3>Total Expenses: ${totalExpenses.toFixed(2)}</h3>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={exp} alt="Expense" style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+                    <h3 style={{ margin: '0' }}>Total Expenses: ₹{totalExpenses.toFixed(2)}</h3>
+                </div>
+               
             </div>
         </div>
     );
