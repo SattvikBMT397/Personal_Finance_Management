@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { deleteTransaction } from '../../redux/authSlice';
+import NoTransactions from '../../components/NoTransation';
 
 const TransactionHistory: React.FC = () => {
     const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
@@ -42,7 +43,10 @@ const TransactionHistory: React.FC = () => {
 
     return (
         <div style={{ padding: '16px' }}>
-         
+         {
+            transactions.length===0?(<NoTransactions/>):
+            (    
+                <>    
             <TextField
                 label="Search by Category"
                 value={searchTerm}
@@ -113,6 +117,9 @@ const TransactionHistory: React.FC = () => {
                     </Grid>
                 ))}
             </Grid>
+            </>
+            )
+}
         </div>
     );
 };
