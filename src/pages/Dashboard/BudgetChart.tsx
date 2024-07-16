@@ -9,12 +9,11 @@ interface BudgetChartProps {
 
 const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const chartRef = useRef<Chart | null>(null); // Ref to store the chart instance
+  const chartRef = useRef<Chart | null>(null); 
   const budgetData = useSelector((state: RootState) => state.auth.currentUser?.budget);
 
   useEffect(() => {
     if (canvasRef.current && budgetData) {
-      // Destroy the previous chart instance if it exists
       if (chartRef.current) {
         chartRef.current.destroy();
       }
@@ -51,7 +50,6 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
         }
       });
     }
-    // Cleanup function to destroy the chart instance when the component unmounts
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
