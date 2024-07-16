@@ -12,8 +12,8 @@ import CommonSidebar from '../../components/commonComponent/commonSidebar';
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
-    
-    
+
+
     const dispatch = useDispatch();
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState<UserData | { name: string; email: string; password: string }>({
@@ -22,7 +22,7 @@ const ProfilePage = () => {
         password: user?.password || '',
     });
 
-    
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -30,7 +30,7 @@ const ProfilePage = () => {
             [name]: value,
         });
     };
-    
+
 
     const handleUpdate = () => {
         dispatch(updateUser(formData));
@@ -39,7 +39,7 @@ const ProfilePage = () => {
 
     return (
         <>
-          <CommonSidebar/>
+            <CommonSidebar />
             <Box
                 sx={{
                     display: 'flex',
@@ -87,7 +87,12 @@ const ProfilePage = () => {
                                         fullWidth
                                         sx={{ marginBottom: 2 }}
                                     />
-                                    <Button onClick={handleUpdate} variant="contained" color="primary" sx={{ marginRight: 2 }}>
+                                    <Button onClick={handleUpdate} variant="contained" color="primary" sx={{
+                                        marginRight: 2, backgroundColor: "#1C8E85",
+                                        '&:hover': {
+                                            backgroundColor: '#2ac4b8',
+                                        },
+                                    }}>
                                         Update
                                     </Button>
                                     <Button onClick={() => setEditing(false)}>Cancel</Button>
@@ -98,7 +103,13 @@ const ProfilePage = () => {
                                     <Typography variant="body1" gutterBottom><strong>Name:</strong> {user?.name}</Typography>
                                     <Typography variant="body1" gutterBottom><strong>Email:</strong> {user?.email}</Typography>
                                     <Typography variant="body1" gutterBottom><strong>Password:</strong> {user?.password}</Typography>
-                                    <Button startIcon={<EditIcon />} onClick={() => setEditing(true)} sx={{ marginTop: 2 }} variant="outlined">
+                                    <Button startIcon={<EditIcon />} onClick={() => setEditing(true)} sx={{
+                                            marginTop: 2, backgroundColor: "#1C8E85",
+                                        color:"white",
+                                        '&:hover': {
+                                            backgroundColor: '#2ac4b8',
+                                        },
+                                    }} variant="contained">
                                         Edit Profile
                                     </Button>
                                 </div>
