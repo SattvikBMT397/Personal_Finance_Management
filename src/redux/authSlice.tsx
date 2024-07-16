@@ -17,11 +17,11 @@ const userSlice = createSlice({
     reducers: {
         login: (state, action: PayloadAction<UserData>) => {
             state.currentUser = action.payload;
-            localforage.setItem('currentUser', action.payload); 
+            sessionStorage.setItem('currentUser', JSON.stringify(action.payload));
         },
         logout: (state) => {
             state.currentUser = null;
-            localforage.removeItem('currentUser'); 
+            sessionStorage.removeItem('currentUser'); 
         },
         updateUser: (state, action: PayloadAction<UserData>) => {
             state.currentUser = action.payload;
@@ -45,8 +45,7 @@ const userSlice = createSlice({
                     budget: newBudget,
                 };
 
-                // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Save updated users to localforage or wherever your users are stored
                 updateBudget(state.currentUser);
             }
@@ -65,7 +64,7 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Update users in localforage
                 updateBudget(state.currentUser);
             }
@@ -80,7 +79,7 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Update users in localforage
                 updateBudget(state.currentUser);
             }
@@ -100,7 +99,7 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Save updated users to localforage or wherever your users are stored
                 updateTransaction(state.currentUser);
             }
