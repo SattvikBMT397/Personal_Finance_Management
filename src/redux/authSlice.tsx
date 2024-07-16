@@ -106,6 +106,14 @@ const userSlice = createSlice({
             }
 
         },
+        deleteTransaction: (state, action: PayloadAction<number>) => {
+            if (state.currentUser && state.currentUser.transaction) {
+              const updatedTransactions = state.currentUser.transaction.filter((_, index) => index !== action.payload);
+              state.currentUser = { ...state.currentUser, transaction: updatedTransactions };
+              localforage.setItem('currentUser', state.currentUser);
+              updateTransaction(state.currentUser);
+            }
+          },
         
     },
 });
@@ -174,7 +182,7 @@ const updateTransaction = (updatedUser: UserData) => {
         });
 };
 
-export const { login, logout, addBudget, updateUser, addTranscation, editBudget,deleteBudget } = userSlice.actions;
+export const { login, logout, addBudget, updateUser, addTranscation,deleteTransaction, editBudget,deleteBudget } = userSlice.actions;
 
 
 export default userSlice.reducer;

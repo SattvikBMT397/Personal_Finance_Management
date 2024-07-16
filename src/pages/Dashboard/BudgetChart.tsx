@@ -12,7 +12,6 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
 
   useEffect(() => {
     if (canvasRef.current && budgetData) {
-      // Destroy the previous chart instance if it exists
       if (chartRef.current) {
         chartRef.current.destroy();
       }

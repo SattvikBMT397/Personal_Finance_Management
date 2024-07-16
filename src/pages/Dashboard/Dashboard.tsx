@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
 import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
+import TransactionHistory from '../Transaction/RecentHistory';
 import './Dashboard.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -71,7 +72,8 @@ const Dashboard: React.FC = () => {
                     <Grid item xs={12}>
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
-                            <RecentTransaction/>
+                            <TransactionHistory />
+
                         </Paper>
                     </Grid>
                 </Grid>
@@ -81,3 +83,5 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
+

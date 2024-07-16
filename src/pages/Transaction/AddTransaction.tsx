@@ -130,14 +130,10 @@ const AddTransaction = () => {
     const transaction = {
       type,
       category,
-      cost: parseFloat(cost), // Convert cost to a number
-      date: new Date(date), // Convert date to a Date object
+      cost: parseFloat(cost),
+      date: new Date(date), 
     };
-
-    // Dispatch the addTranscation action
     dispatch(addTranscation(transaction));
-
-    // Show snackbar message
     setSnackbarMessage('Transaction added successfully!');
     setSnackbarOpen(true);
   };

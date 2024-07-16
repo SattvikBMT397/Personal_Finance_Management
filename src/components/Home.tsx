@@ -5,6 +5,8 @@ import ContactMailIcon from '@mui/icons-material/ContactMail';
 import GroupIcon from '@mui/icons-material/Group';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Images from './Logo/Budget Buddy.png';
 import MobileImage from "./Logo/mobile.png";
@@ -66,8 +68,8 @@ const Home = () => {
         {
           currentUser ? (
             <div className='header_end'>
-              <button onClick={handleLogout} className='btn2'>Logout</button>
-              <button onClick={handleDashboard} className='btn2'>Dashboard </button>
+              <button onClick={handleLogout} className='btn2'> {isMobile || isIpad ? <LogoutIcon /> : 'Logout'}</button>
+              <button onClick={handleDashboard} className='btn2'>{isMobile || isIpad ? <DashboardIcon/> : 'DashBoard'} </button>
             </div>
             
           ): (
