@@ -1,0 +1,23 @@
+.transaction-paper {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.transaction-title {
+    margin-bottom: 16px;
+    color: #444;
+}
+
+.transaction-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.no-transactions {
+    padding: 10px;
+    text-align: center;
+    color: #999;
+}

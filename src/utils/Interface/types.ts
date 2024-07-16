@@ -19,3 +19,9 @@ export interface UserData {
         date?: Date;
     }[];
 }
+export interface Transaction {
+    type: string;
+    category: string;
+    cost: number;
+    date: Date;
+  }

@@ -9,6 +9,7 @@ import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
 import { expenses } from '../Dashboard/dummyData';
 import './Dashboard.css';
+import RecentTransaction from './RecentTransaction';
 
 const Dashboard: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,12 +22,10 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         setShowMenuIcon(!isOpen);
     }, [isOpen]);
-
     const convertedExpenses = expenses.map(expense => ({
         ...expense,
         amount: expense.amount.toString()
     }));
-
     return (
         <Grid container className="dashboard-container">
             <Grid item xs={isOpen ? 3 : 'auto'}>
@@ -46,7 +45,9 @@ const Dashboard: React.FC = () => {
                         </IconButton>
                     )}
                     <h1 className="dashboard-title">Dashboard</h1>
-     <Grid container spacing={3} className="dashboard-content">
+                </div>
+
+                <Grid container spacing={3} className="dashboard-content">
                     <Grid item xs={12} sm={6} md={4}>
                         <Paper className="chart-paper">
                             <h2>Income</h2>
@@ -68,7 +69,7 @@ const Dashboard: React.FC = () => {
                     <Grid item xs={12}>
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
-                            <p>This is where recent transactions will be displayed.</p>
+                            <RecentTransaction/>
                         </Paper>
                     </Grid>
                 </Grid>
