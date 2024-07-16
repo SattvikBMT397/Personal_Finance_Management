@@ -7,12 +7,15 @@ import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
 import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
-import { expenses } from '../Dashboard/dummyData';
 import './Dashboard.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const Dashboard: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showMenuIcon, setShowMenuIcon] = useState(false);
+    const expenses = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
+
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -25,7 +28,7 @@ const Dashboard: React.FC = () => {
     // Convert expenses to match the expected type for BudgetChart
     const convertedExpenses = expenses.map(expense => ({
         ...expense,
-        amount: expense.amount.toString()
+        cost: expense.cost,
     }));
 
     return (

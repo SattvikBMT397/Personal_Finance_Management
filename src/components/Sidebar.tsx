@@ -54,6 +54,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <List sx={{ width: 250 }}>
                 <ListItemButton
                     component={Link}
+                    to="/dashboard"
+                    sx={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        marginLeft: "30px",
+                        backgroundColor: activeLink === '/dashboard' ? '#f0f0f0' : 'transparent', // Highlight active link
+                    }}
+                    onClick={() => handleLinkClick('/dashboard')}
+                >
+                    <ListItemText primary="Dashboard" />
+                </ListItemButton>
+                <ListItemButton
+                    component={Link}
                     to="/add-budget"
                     sx={{
                         textDecoration: 'none',
@@ -80,19 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     <ListItemText primary="Add Transactions" />
                 </ListItemButton>
 
-                <ListItemButton
-                    component={Link}
-                    to="/add-expense"
-                    sx={{
-                        textDecoration: 'none',
-                        color: 'inherit',
-                        marginLeft: "30px",
-                        backgroundColor: activeLink === '/add-expense' ? '#f0f0f0' : 'transparent', // Highlight active link
-                    }}
-                    onClick={() => handleLinkClick('/add-expense')}
-                >
-                    <ListItemText primary="Add Expenses" />
-                </ListItemButton>
+               
             </List>
             {
                 currentUser ? (
