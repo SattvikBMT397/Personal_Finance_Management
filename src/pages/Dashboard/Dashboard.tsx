@@ -26,8 +26,8 @@ const Dashboard: React.FC = () => {
     }, [isOpen]);
 
     const convertedExpenses = expenses.map(expense => ({
-        category: expense.category,
-        amount: expense.cost.toString(),
+        ...expense,
+        cost: expense.cost
     }));
 
     return (
