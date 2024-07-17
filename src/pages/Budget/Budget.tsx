@@ -1,5 +1,3 @@
-// AddToBudgetPage.tsx
-
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
@@ -17,7 +15,7 @@ import { Alert } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import backgroundImage from '../../components/Logo/bg.jpg';
+import backgroundImage from '../../components/Logo/bb.jpg';
 import { RootState } from '../../redux/store';
 import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import { categories } from '../../utils/categories/categories';
@@ -36,21 +34,29 @@ const AddToBudgetPage: React.FC = () => {
         setEditIndex,
         handleAmountChange,
         clearForm,
-    } = useBudgetFormState(); 
+    } = useBudgetFormState();
     const { loading, operationStatus, handleAddBudget, handleEditBudget, handleDeleteBudget, resetOperationStatus } = useBudgetOperations(); // Use custom hook for budget operations
     const [openToast, setOpenToast] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState('');
+    const [toastSeverity, setToastSeverity] = React.useState<'success' | 'error'>('success');
 
     React.useEffect(() => {
-        if (operationStatus === 'add') {
+        if (!currentUser) {
+            // User is not logged in, show toast message
+            setToastMessage('Please login to access budget functionality.');
+            setToastSeverity('error');
+            setOpenToast(true);
+        } else if (operationStatus === 'add') {
             setToastMessage('Expense added successfully!');
+            setToastSeverity('success');
             setOpenToast(true);
             clearForm();
         } else if (operationStatus === 'delete') {
             setToastMessage('Expense deleted successfully!');
+            setToastSeverity('success');
             setOpenToast(true);
         }
-    }, [operationStatus]);
+    }, [currentUser, operationStatus]);
 
     const handleToastClose = () => {
         setOpenToast(false);
@@ -67,7 +73,7 @@ const AddToBudgetPage: React.FC = () => {
                     alignItems: 'center',
                     minHeight: '100vh',
                     backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: 'cover',
+                    backgroundSize: 'fit',
                     backgroundPosition: 'center',
                     padding: 2,
                 }}
@@ -84,31 +90,32 @@ const AddToBudgetPage: React.FC = () => {
                 >
                     <Snackbar
                         open={openToast}
-                        autoHideDuration={1000} // Set autoHideDuration to 1000ms (1 second)
+                        autoHideDuration={5000}
                         onClose={handleToastClose}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
-                        <Alert onClose={handleToastClose} severity="success" sx={{ width: '100%' }}>
+                        <Alert onClose={handleToastClose} severity={toastSeverity} sx={{ width: '100%' }}>
                             {toastMessage}
                         </Alert>
                     </Snackbar>
 
-                    <Box 
+                    <Box
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',
                             borderRadius: '8px',
                             marginTop: '10px',
-                            backdropFilter: 'blur(10px)',
+                            backdropFilter: 'blur(30px)',
                             boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                             maxWidth: '600px',
                             width: '90%',
                             padding: '20px',
                             maxHeight: '80vh',
                             overflowY: 'auto',
+                            border: '1px solid black',
                         }}
                     >
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontStyle: 'italic', color: '#000' }}>
-                            Add To Wallet💸
+                            💰 Add To Wallet
                         </Typography>
                         <Select
                             value={category}
@@ -140,7 +147,7 @@ const AddToBudgetPage: React.FC = () => {
                                 onClick={() => {
                                     handleEditBudget(editIndex, category, amount);
                                 }}
-                                disabled={loading}
+                                disabled={!currentUser || loading}
                                 loading={loading}
                             >
                                 Save
@@ -148,10 +155,17 @@ const AddToBudgetPage: React.FC = () => {
                         ) : (
                             <CommonButton
                                 onClick={() => {
-                                    handleAddBudget(category, amount);
+                                    if (!currentUser) {
+                                        // User is not logged in, show toast message
+                                        setToastMessage('Please login to access budget functionality.');
+                                        setToastSeverity('error');
+                                        setOpenToast(true);
+                                    } else {
+                                        handleAddBudget(category, amount);
+                                    }
                                 }}
                                 startIcon={<AddCircleIcon />}
-                                disabled={loading}
+                                disabled={!currentUser || loading}
                                 loading={loading}
                             >
                                 Add Wallet
@@ -159,7 +173,7 @@ const AddToBudgetPage: React.FC = () => {
                         )}
                         <Box sx={{ maxHeight: 'calc(80vh - 300px)', overflowY: 'auto', marginTop: '10px' }}>
                             {userBudget.map((budgetItem, index) => (
-                                <Card key={index} sx={{ mb: 2, boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                                <Card key={index} sx={{ mb: 2, boxShadow: '0 2px 4px rgba(0,0,0,0.1)', border: '2px solid #1C8E85' }}>
                                     <CardContent>
                                         <Grid container alignItems="center" justifyContent="space-between">
                                             <Grid item>
@@ -167,18 +181,18 @@ const AddToBudgetPage: React.FC = () => {
                                                     {budgetItem.category}
                                                 </Typography>
                                                 <Typography variant="body1" color="text.secondary">
-                                                    Amount: ${budgetItem.amount}
+                                                    Amount: ₹{budgetItem.amount}
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
                                                 <Tooltip title="Edit">
-                                                    <IconButton onClick={() => setEditIndex(index)}>
-                                                        <EditIcon sx={{ color: "black" }} />
+                                                    <IconButton onClick={() => setEditIndex(index)} disabled={!currentUser}>
+                                                        <EditIcon sx={{ color: 'black' }} />
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Delete">
-                                                    <IconButton onClick={() => handleDeleteBudget(index)}>
-                                                        <DeleteIcon sx={{ color:"#d11a2a"}} />
+                                                    <IconButton onClick={() => handleDeleteBudget(index)} disabled={!currentUser}>
+                                                        <DeleteIcon sx={{ color: '#d11a2a' }} />
                                                     </IconButton>
                                                 </Tooltip>
                                             </Grid>

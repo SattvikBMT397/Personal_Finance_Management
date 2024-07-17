@@ -60,8 +60,8 @@ const LoginForm = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Card sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 3 }}>
+        <Container component="main" maxWidth="xs" >
+            <Card sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 3, border: '0.5px solid #1C8E85' }}>
                 <Avatar sx={{ m: 1, bgcolor: '#1C8E85' }}>
                     <LockOutlinedIcon />
                 </Avatar>

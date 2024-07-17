@@ -17,7 +17,6 @@ const Dashboard: React.FC = () => {
     const [showMenuIcon, setShowMenuIcon] = useState(false);
     const expenses = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
 
-
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
@@ -25,10 +24,12 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         setShowMenuIcon(!isOpen);
     }, [isOpen]);
+
     const convertedExpenses = expenses.map(expense => ({
         ...expense,
         cost: expense.cost,
     }));
+
     return (
         <Grid container className="dashboard-container">
             <Grid item xs={isOpen ? 3 : 'auto'}>
@@ -73,7 +74,6 @@ const Dashboard: React.FC = () => {
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
                             <TransactionHistory />
-
                         </Paper>
                     </Grid>
                 </Grid>
@@ -83,5 +83,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-
-

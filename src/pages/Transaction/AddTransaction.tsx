@@ -13,9 +13,10 @@ import Alert from '@mui/material/Alert';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import background from '../../components/Logo/bg.jpg';
-import { useDispatch } from 'react-redux';
+import background from '../../components/Logo/bb.jpg';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTranscation } from '../../redux/authSlice';
+import { RootState } from '../../redux/store';
 import CommonSidebar from '../../components/commonComponent/commonSidebar';
 
 const theme = createTheme({
@@ -49,12 +50,12 @@ const FullWidthBackground = styled('div')({
   width: '100%',
   height: '100%',
   backgroundImage: `url(${background})`,
-  backgroundSize: 'cover',
+  backgroundSize: 'contain',
   backgroundPosition: 'center',
   zIndex: -1,
 });
 
-const StyledContainer = styled(Container)(({ theme }) => ({
+const FormContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -65,7 +66,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   width: '50%',
   maxWidth: '600px',
   height: '40%',
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  marginTop: '80px',
+  backgroundColor: 'rgba(255, 255, 255, 255)',
+  border: '1px solid black',
   zIndex: 1,
   [theme.breakpoints.down('sm')]: {
     width: '90%',
@@ -76,7 +79,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   marginTop: theme.spacing(3),
   width: '100%',
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  backgroundColor: 'rgba(255, 255, 255, 255)',
   borderRadius: theme.shape.borderRadius,
 }));
 
@@ -86,11 +89,18 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   color: '#000',
 }));
 
-const StyledButton = styled(Button)(() => ({
-  backgroundColor: "#1C8E85",
+const StyledButton = styled(Button)(({ theme, disabled }) => ({
+  backgroundColor: disabled ? theme.palette.grey[400] : '#1C8E85',
   '&:hover': {
-    backgroundColor: "#2ac4b8",
+    backgroundColor: disabled ? theme.palette.grey[400] : '#2ac4b8',
   },
+}));
+
+const SidebarContainer = styled('div')(({ theme }) => ({
+  position: 'fixed',
+  top: '3px',
+  backgroundColor: '#fff',
+  padding: theme.spacing(2),
 }));
 
 const categories = {
@@ -101,6 +111,7 @@ const categories = {
 type CategoryType = keyof typeof categories;
 
 const AddTransaction = () => {
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch();
   const [category, setCategory] = React.useState('');
   const [type, setType] = React.useState<CategoryType>('expense');
@@ -108,6 +119,7 @@ const AddTransaction = () => {
   const [date, setDate] = React.useState('');
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'error'>('success');
 
   const handleCategoryChange = (event: SelectChangeEvent<string>) => {
     setCategory(event.target.value as string);
@@ -115,7 +127,7 @@ const AddTransaction = () => {
 
   const handleTypeChange = (event: SelectChangeEvent<string>) => {
     setType(event.target.value as CategoryType);
-    setCategory(''); 
+    setCategory('');
   };
 
   const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,15 +138,22 @@ const AddTransaction = () => {
     setDate(event.target.value);
   };
 
-  const handleSubmit= () => {
+  const handleSubmit = () => {
+    if (!currentUser) {
+      setSnackbarMessage('Please login to add a transaction.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
     const transaction = {
       type,
       category,
       cost: parseFloat(cost),
-      date: new Date(date), 
+      date: new Date(date),
     };
     dispatch(addTranscation(transaction));
     setSnackbarMessage('Transaction added successfully!');
+    setSnackbarSeverity('success');
     setSnackbarOpen(true);
   };
 
@@ -144,18 +163,21 @@ const AddTransaction = () => {
 
   return (
     <>
-      <CommonSidebar/>
       <ThemeProvider theme={theme}>
         <FullWidthBackground />
-        <StyledContainer>
+        <SidebarContainer>
+          <CommonSidebar />
+        </SidebarContainer>
+
+        <FormContainer>
           <StyledTypography variant="h4" gutterBottom>
-            Add Transaction💰
+            💰Add Transaction
           </StyledTypography>
           <StyledTypography variant="h6" gutterBottom>
             How Much?
           </StyledTypography>
           <StyledTypography variant="h5" gutterBottom>
-            $0.00 {/* Replace this with your logic to show total amount */}
+            ₹0.00 {/* Replace this with your logic to show total amount */}
           </StyledTypography>
           <StyledPaper elevation={3}>
             <InputLabel>Type</InputLabel>
@@ -199,19 +221,19 @@ const AddTransaction = () => {
             <StyledButton
               variant="contained"
               onClick={handleSubmit}
-              sx={{ mt: 2, color: 'white', width: "100%" }}
+              sx={{ mt: 2, color: 'white', width: '100%' }}
             >
               Submit
             </StyledButton>
           </StyledPaper>
-        </StyledContainer>
+        </FormContainer>
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={3000}
+          autoHideDuration={4000}
           onClose={handleSnackbarClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import {
-    TextField,
-    Box,
-    Grid,
-    Paper,
-    Typography,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Avatar,
-    Card,
-} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
 import { format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
 import NoTransactions from '../../components/NoTransation';
