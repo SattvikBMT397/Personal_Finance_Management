@@ -64,9 +64,10 @@ const FormContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   width: '50%',
+  marginTop:"1.5rem",
   maxWidth: '600px',
   height: '40%',
-  marginTop: '80px',
+  
   backgroundColor: 'rgba(255, 255, 255, 255)',
   border: '1px solid black',
   zIndex: 1,
@@ -76,7 +77,7 @@ const FormContainer = styled(Container)(({ theme }) => ({
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
+  padding: theme.spacing(2),
   marginTop: theme.spacing(3),
   width: '100%',
   backgroundColor: 'rgba(255, 255, 255, 255)',
@@ -98,9 +99,11 @@ const StyledButton = styled(Button)(({ theme, disabled }) => ({
 
 const SidebarContainer = styled('div')(({ theme }) => ({
   position: 'fixed',
-  top: '3px',
+  top: '-1px',
+  left:"1rem",
   backgroundColor: '#fff',
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
+  zIndex:"5"
 }));
 
 const categories = {
