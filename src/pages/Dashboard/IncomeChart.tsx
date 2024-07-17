@@ -57,7 +57,7 @@ const IncomeChart: React.FC = () => {
         <div style={{ height: '400px', width: '100%' }}>
             <canvas style={{ height: '80%', width: '80%', margin: 'auto' }} ref={canvasRef} />
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <h3>💸 Total Income : ₹{totalIncome} </h3>
+                <h3 style={{marginTop: "30px"}}>💸 Total Income : ₹{totalIncome} </h3>
             </div>
         </div>
     );

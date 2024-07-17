@@ -2,16 +2,13 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import localforage from 'localforage';
-import {
-    Avatar,
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Grid,
-    Typography,
-    Link
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
 import { signupSchema } from '../../utils/schema/LoginSignupSchema';
@@ -27,6 +24,10 @@ const SignupForm = () => {
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(signupSchema),
     });
+
+    const handleSignUpClick = () => {
+        navigate('/login');
+    };
 
     const onSubmit = async (data: UserData) => {
         setSubmitting(true);
@@ -144,11 +145,15 @@ const SignupForm = () => {
                                     {submitting ? 'Submitting...' : 'Sign Up'}
                                 </Button>
                                 <Typography sx={{ mt: 2, color: '#ffffff' }}>
-                                    Already have an account?{' '}
-                                    <Link href="/login" sx={{ color: "#1C8E85" }}>
-                                        Sign in
-                                    </Link>
-                                </Typography>
+            Already have an account?{' '}
+            <Typography
+                component="span"
+                sx={{ color: "#1C8E85", cursor: 'pointer' }}
+                onClick={handleSignUpClick}
+            >
+                Sign up
+            </Typography>
+        </Typography>                
                             </form>
                         </CardContent>
                     </Card>
