@@ -23,7 +23,7 @@ const AllRoutes = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-budget" element={<Budget />} />
           <Route path="/add-transaction" element={<AddTransaction />} />
-          <Route path="/transaction-history" element={<TransactionHistory/>}/>
+          <Route path="/transaction" element={<TransactionHistory/>}/>
     </Routes>
 </Router>
 </>
