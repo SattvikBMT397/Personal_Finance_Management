@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import { useSelector } from 'react-redux'; // Import useSelector hook from react-redux
+import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
 const IncomeChart: React.FC = () => {
@@ -54,13 +54,13 @@ const IncomeChart: React.FC = () => {
     }, [incomeTransactions]); // Re-render chart when incomeTransactions change
 
     return (
-        <div>
-            <canvas ref={canvasRef} />
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <div style={{ height: '400px', width: '100%' }}>
+            <canvas style={{ height: '80%', width: '80%', margin: 'auto' }} ref={canvasRef} />
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <h3>💸 Total Income : ₹{totalIncome} </h3>
             </div>
         </div>
     );
-}
+};
 
 export default IncomeChart;

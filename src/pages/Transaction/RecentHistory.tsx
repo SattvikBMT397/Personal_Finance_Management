@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
-import {
-    TextField,
-    Box,
-    Grid,
-    Paper,
-    Typography,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    IconButton,
-    Avatar,
-    Divider,
-} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -104,7 +102,7 @@ const TransactionHistory: React.FC = () => {
                                 {format(new Date(transaction.date), 'MMMM d, yyyy')}
                             </Typography>
                             <Typography variant="h5" component="div" sx={{ mt: 2, fontWeight: 'bold' }}>
-                                ${transaction.cost.toFixed(2)}
+                                ₹{transaction.cost.toFixed(2)}
                             </Typography>
                             <IconButton 
                                 aria-label="delete" 

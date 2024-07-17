@@ -26,8 +26,8 @@ const Dashboard: React.FC = () => {
     }, [isOpen]);
 
     const convertedExpenses = expenses.map(expense => ({
-        category: expense.category,
-        amount: expense.cost.toString(),
+        ...expense,
+        cost: expense.cost
     }));
 
     return (
@@ -73,7 +73,8 @@ const Dashboard: React.FC = () => {
                     <Grid item xs={12}>
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
-                            <RecentTransaction />
+                            <TransactionHistory />
+
                         </Paper>
                     </Grid>
                 </Grid>

@@ -3,7 +3,6 @@ import { useMediaQuery } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import GroupIcon from '@mui/icons-material/Group';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard'
@@ -58,11 +57,7 @@ const Home = () => {
               {isMobile || isIpad ? <GroupIcon /> : 'Our Teams'}
             </Link>
           </h2>
-          <h2>
-            <Link to="/A" className="navLink">
-              {isMobile || isIpad ? <AddCircleIcon /> : 'Add Transaction'}
-            </Link>
-          </h2>
+          
         </div>
 
         {

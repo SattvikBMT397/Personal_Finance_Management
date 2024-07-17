@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { BudgetChartProps } from '../../utils/Interface/types';
 
-
 const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const chartRef = useRef<Chart | null>(null); 
+  const chartRef = useRef<Chart | null>(null);
   const budgetData = useSelector((state: RootState) => state.auth.currentUser?.budget);
+  const [totalBudget, setTotalBudget] = useState<number>(0);
 
   useEffect(() => {
     if (canvasRef.current && budgetData) {
@@ -25,6 +25,10 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
           remaining: parseFloat(budgetItem.amount) - totalExpenses
         };
       });
+
+      // Calculate total budget
+      const total = budgetData.reduce((acc, budgetItem) => acc + parseFloat(budgetItem.amount), 0);
+      setTotalBudget(total);
 
       // Create a new Chart instance with updated data
       chartRef.current = new Chart(canvasRef.current, {
@@ -49,6 +53,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
         }
       });
     }
+
     return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
@@ -56,7 +61,16 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
     };
   }, [expenses, budgetData]);
 
-  return <canvas style={{ marginTop: '28%', marginBottom: '39%' }} ref={canvasRef} />;
+  return (
+    <div style={{ height: '400px', width: '100%' }}>
+      <canvas style={{ maxHeight: '100%', maxWidth: '100%' }} ref={canvasRef} />
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h3 style={{ marginTop: '90px', marginLeft: '20px'}}>💰Total Budget: ₹{totalBudget.toFixed(0)}</h3>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default BudgetChart;

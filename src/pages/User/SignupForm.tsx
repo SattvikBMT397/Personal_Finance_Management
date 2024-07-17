@@ -59,7 +59,6 @@ const SignupForm = () => {
             }
         }, 1000);
     };
-
     return (
         <div className='mains'>
             <div className="background">
