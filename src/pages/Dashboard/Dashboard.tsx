@@ -7,16 +7,15 @@ import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
 import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
-import TransactionHistory from '../Transaction/RecentHistory';
 import './Dashboard.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import RecentTransaction from './RecentTransaction';
 
 const Dashboard: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showMenuIcon, setShowMenuIcon] = useState(false);
     const expenses = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
-
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -25,10 +24,12 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         setShowMenuIcon(!isOpen);
     }, [isOpen]);
+
     const convertedExpenses = expenses.map(expense => ({
-        ...expense,
-        cost: expense.cost,
+        category: expense.category,
+        amount: expense.cost.toString(),
     }));
+
     return (
         <Grid container className="dashboard-container">
             <Grid item xs={isOpen ? 3 : 'auto'}>
@@ -72,8 +73,7 @@ const Dashboard: React.FC = () => {
                     <Grid item xs={12}>
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
-                            <TransactionHistory />
-
+                            <RecentTransaction />
                         </Paper>
                     </Grid>
                 </Grid>
@@ -83,5 +83,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-
-
