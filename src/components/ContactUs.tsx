@@ -1,7 +1,15 @@
+import React, { useState } from 'react';
 import Footer from './Footer';
 import { styled } from '@mui/system';
 import { Container, Box, Typography, Button, TextField } from '@mui/material';
 import { Email, Phone, LocationOn, Send } from '@mui/icons-material';
+import localforage from 'localforage';
+
+interface ContactMessage {
+  name: string;
+  email: string;
+  message: string;
+}
 
 const StyledContainer = styled(Container)({
   background: 'linear-gradient(180deg, #28A197 0%, #0F3B37 100%)',
@@ -75,7 +83,41 @@ const CustomTextField = styled(TextField)({
   },
 });
 
-const ContactUsPage = () => {
+const ContactUsPage: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async () => {
+    // event.preventDefault();
+
+    if (!name || !email || !message) {
+      setError('All fields are required.');
+      return;
+    }
+
+    const contactData: ContactMessage = {
+      name,
+      email,
+      message,
+    };
+
+    try {
+      const existingData: ContactMessage[] = (await localforage.getItem<ContactMessage[]>('contactMessages')) || [];
+      existingData.push(contactData);
+      await localforage.setItem('contactMessages', existingData);
+      alert('Your message has been sent!');
+      setName('');
+      setEmail('');
+      setMessage('');
+      setError('');
+    } catch (error) {
+      console.error('Error saving message:', error);
+      setError('Failed to send message. Please try again.');
+    }
+  };
+
   return (
     <>
       <StyledContainer>
@@ -86,11 +128,11 @@ const ContactUsPage = () => {
               <WhiteBackgroundBox>
                 <Typography variant="h6">Let's discuss something <span style={{ color: '#5DEBD7' }}>cool</span> together</Typography>
               </WhiteBackgroundBox>
-              <p><Email /> SaulDesign@gmail.com </p>
+              <p><Email /> SFR@Binmile.com </p>
               <p><Phone /> +123456789</p>
               <p><LocationOn /> 123 Street 456 House</p>
             </ContactInfo>
-            <ContactForm flex={1}>
+            <ContactForm flex={1} component="form" onSubmit={handleSubmit}>
               <Typography variant="h6">I'm interested in...</Typography>
               <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Be Partner</Button>
               <Button variant="outlined" sx={{ color: 'white', borderColor: '#5DEBD7', margin: '0.5rem' }}>Advertise</Button>
@@ -101,23 +143,30 @@ const ContactUsPage = () => {
                 fullWidth
                 variant="outlined"
                 margin="normal"
-                placeholder="Your name"
+                label="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <CustomTextField
                 fullWidth
                 variant="outlined"
                 margin="normal"
-                placeholder="Your email"
+                label="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <CustomTextField
                 fullWidth
                 variant="outlined"
                 margin="normal"
-                placeholder="Your message"
+                label="Your message"
                 multiline
                 rows={4}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
-              <StyledButton variant="contained" startIcon={<Send />}>Send Message</StyledButton>
+              {error && <Typography color="error">{error}</Typography>}
+              <StyledButton type="submit" variant="contained" startIcon={<Send />}>Send Message</StyledButton>
             </ContactForm>
           </Box>
         </Container>
