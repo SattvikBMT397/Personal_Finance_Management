@@ -177,7 +177,7 @@ const AddTransaction = () => {
             How Much?
           </StyledTypography>
           <StyledTypography variant="h5" gutterBottom>
-            ₹0.00 {/* Replace this with your logic to show total amount */}
+            ₹0.00 
           </StyledTypography>
           <StyledPaper elevation={3}>
             <InputLabel>Type</InputLabel>

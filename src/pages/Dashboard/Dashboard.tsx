@@ -7,10 +7,10 @@ import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
 import ExpensesChart from './ExpensesChart';
 import BudgetChart from './BudgetChart';
-import TransactionHistory from '../Transaction/RecentHistory';
 import './Dashboard.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import RecentTransaction from './RecentTransaction';
 
 const Dashboard: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -26,8 +26,8 @@ const Dashboard: React.FC = () => {
     }, [isOpen]);
 
     const convertedExpenses = expenses.map(expense => ({
-        ...expense,
-        cost: expense.cost,
+        category: expense.category,
+        amount: expense.cost.toString(),
     }));
 
     return (
@@ -74,6 +74,7 @@ const Dashboard: React.FC = () => {
                         <Paper className="chart-paper">
                             <h2>Recent Transactions</h2>
                             <TransactionHistory />
+
                         </Paper>
                     </Grid>
                 </Grid>
