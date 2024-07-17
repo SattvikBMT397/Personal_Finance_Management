@@ -1,17 +1,14 @@
 import { useState } from 'react';
-import { useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import localforage from 'localforage';
-import {
-    Avatar,
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Grid,
-    Typography,
-    Link
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
@@ -30,7 +27,9 @@ const LoginForm = () => {
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema),
     });
-
+    const handleSignUpClick = () => {
+        navigate('/signup');
+    };
     const onSubmit = async (data: UserData) => {
         setSubmitting(true);
         setTimeout(async () => {
@@ -60,7 +59,7 @@ const LoginForm = () => {
             <div className="background">
                 <div className="shape"></div>
                 <div className="shape"></div>
-                <Container component="main" maxWidth="xs" sx={{marginTop:"30px"}}>
+                <Container component="main" maxWidth="xs" sx={{ marginTop: "30px" }}>
                     <Card
                         sx={{
                             backdropFilter: 'blur(10px)',
@@ -84,36 +83,36 @@ const LoginForm = () => {
                                         <CommonController
                                             name="email"
                                             control={control}
-                                              label="Email"
-                                                    placeholder="Email"
-                                                    error={!!errors.email}
-                                                    helperText={errors.email?.message}
-                                                    InputProps={{
-                                                        style: { color: '#ffffff' },
-                                                        sx: { backgroundColor: 'grey', borderRadius: 3 }
-                                                    }}
-                                                    InputLabelProps={{
-                                                        style: { color: '#ffffff' }
-                                                    }}
-                                                />
+                                            label="Email"
+                                            placeholder="Email"
+                                            error={!!errors.email}
+                                            helperText={errors.email?.message}
+                                            InputProps={{
+                                                style: { color: '#ffffff' },
+                                                sx: { backgroundColor: 'grey', borderRadius: 3 }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#ffffff' }
+                                            }}
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <CommonController
                                             name="password"
                                             control={control}
                                             type="password"
-                                           label="Password"
-                                         placeholder="Password"
-                                         error={!!errors.password}
-                                             helperText={errors.password?.message}
-                                                    InputProps={{
-                                                        style: { color: '#ffffff' },
-                                                        sx: { backgroundColor: 'grey', borderRadius: 3 }
-                                                    }}
-                                                    InputLabelProps={{
-                                                        style: { color: '#ffffff' }
-                                                    }}
-                                                />
+                                            label="Password"
+                                            placeholder="Password"
+                                            error={!!errors.password}
+                                            helperText={errors.password?.message}
+                                            InputProps={{
+                                                style: { color: '#ffffff' },
+                                                sx: { backgroundColor: 'grey', borderRadius: 3 }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#ffffff' }
+                                            }}
+                                        />
                                     </Grid>
                                     {error && (
                                         <Grid item xs={12}>
@@ -144,11 +143,16 @@ const LoginForm = () => {
                                 >
                                     {submitting ? 'Logging in...' : 'Log In'}
                                 </Button>
-                                <Typography sx={{ mt: 2, color: '#ffffff', textAlign: 'center' }}>
+
+                                <Typography sx={{ mt: 2, color: '#ffffff' }}>
                                     Don't have an account?{' '}
-                                    <Link href="/signup" sx={{ color: "#1C8E85" }}>
-                                        Sign up
-                                    </Link>
+                                    <Typography
+                                        component="span"
+                                        sx={{ color: "#1C8E85", cursor: 'pointer' }}
+                                        onClick={handleSignUpClick}
+                                    >
+                                        Sign In
+                                    </Typography>
                                 </Typography>
                             </form>
                         </CardContent>
