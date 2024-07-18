@@ -1,6 +1,4 @@
 import '../App.css';
-import Footer from './Footer';
-
 function OurTeams() {
     return (
         <>
@@ -10,46 +8,24 @@ function OurTeams() {
       <div className='avatar-row'>
         <div className='avatar'>
           <div className='avatar-info'>
-            <div className='name'>John Doe</div>
-            <div className='designation'>Software Engineer</div>
+            <div className='name'>Sattvik Dwivedi</div>
+            <div className='designation'>Software Developer Trainee</div>
           </div>
         </div>
         <div className='avatar'>
           <div className='avatar-info'>
-            <div className='name'>Jane Smith</div>
-            <div className='designation'>UI/UX Designer</div>
+            <div className='name'>Faheem Akhtar</div>
+            <div className='designation'>Software Developer Trainee</div>
           </div>
         </div>
         <div className='avatar'>
           <div className='avatar-info'>
-            <div className='name'>Michael Johnson</div>
-            <div className='designation'>Project Manager</div>
+            <div className='name'>Rohit Dobhiyal</div>
+            <div className='designation'>Software Developer Trainee</div>
           </div>
         </div>
       </div>
-
-      <div className='avatar-row'>
-        <div className='avatar'>
-          <div className='avatar-info'>
-            <div className='name'>Emily Brown</div>
-            <div className='designation'>Marketing Specialist</div>
-          </div>
-        </div>
-        <div className='avatar'>
-          <div className='avatar-info'>
-            <div className='name'>David Wilson</div>
-            <div className='designation'>Data Analyst</div>
-          </div>
-        </div>
-        <div className='avatar'>
-          <div className='avatar-info'>
-            <div className='name'>Rachel Taylor</div>
-            <div className='designation'>Quality Assurance</div>
-          </div>
-        </div>
-          </div>
       </div>
-          <Footer/> 
       </>
       
   );

@@ -32,7 +32,7 @@ const CommonSidebar = () => {
                             position: 'absolute',
                             top: 5,
                             left: 5,
-                            color: 'white',
+                            color: 'black',
                             '& .MuiSvgIcon-root': {
                                 fontSize: '3rem',  
                             },

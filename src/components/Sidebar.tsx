@@ -48,50 +48,71 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             variant="temporary"
             anchor="left"
         >
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '20px 0', display: 'block', marginLeft: '60px' }}>
-                <Avatar alt="Logo" src={logo} sx={{ width: 100, height: 100 }} />
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '20px 0', display: 'block', marginLeft: '30px' }}>
+                <Avatar alt="Logo" src={logo} sx={{ width: '80%', height: 100 }} />
             </Link>
-            <List sx={{ width: 250 }}>
+            <List sx={{ width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <ListItemButton
+                    component={Link}
+                    to="/dashboard"
+                    sx={{
+                        width: '100%',
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        backgroundColor: activeLink === '/dashboard' ? '#f0f0f0' : 'transparent',
+                        textAlign: 'justify',
+                        paddingLeft: '60px',
+                    }}
+                    onClick={() => handleLinkClick('/dashboard')}
+                >
+                    <ListItemText primary="Dashboard" />
+                </ListItemButton>
                 <ListItemButton
                     component={Link}
                     to="/add-budget"
                     sx={{
+                        width: '100%',
                         textDecoration: 'none',
                         color: 'inherit',
-                        marginLeft: "30px",
-                        backgroundColor: activeLink === '/add-budget' ? '#f0f0f0' : 'transparent', // Highlight active link
+                        backgroundColor: activeLink === '/add-budget' ? '#f0f0f0' : 'transparent',
+                        textAlign: 'justify',
+                        paddingLeft: '60px',
                     }}
                     onClick={() => handleLinkClick('/add-budget')}
                 >
                     <ListItemText primary="Add Budget" />
                 </ListItemButton>
-
                 <ListItemButton
                     component={Link}
                     to="/add-transaction"
                     sx={{
+                        width: '100%',
                         textDecoration: 'none',
                         color: 'inherit',
-                        marginLeft: "30px",
-                        backgroundColor: activeLink === '/add-transaction' ? '#f0f0f0' : 'transparent', // Highlight active link
+                        backgroundColor: activeLink === '/add-transaction' ? '#f0f0f0' : 'transparent',
+                        textAlign: 'justify',
+                        paddingLeft: '60px',
                     }}
                     onClick={() => handleLinkClick('/add-transaction')}
                 >
                     <ListItemText primary="Add Transactions" />
                 </ListItemButton>
-
                 <ListItemButton
                     component={Link}
-                    to="/add-expense"
+                    to="/transaction"
                     sx={{
+                        width: '100%',
                         textDecoration: 'none',
                         color: 'inherit',
-                        marginLeft: "30px",
-                        backgroundColor: activeLink === '/add-expense' ? '#f0f0f0' : 'transparent', // Highlight active link
+                        backgroundColor: activeLink === '/transaction' ? '#f0f0f0' : 'transparent',
+                        textAlign: 'justify',
+                        paddingLeft: '60px',
+                        
+                        
                     }}
-                    onClick={() => handleLinkClick('/add-expense')}
+                    onClick={() => handleLinkClick('/transaction')}
                 >
-                    <ListItemText primary="Add Expenses" />
+                    <ListItemText primary="Transactions History" />
                 </ListItemButton>
             </List>
             {
@@ -106,7 +127,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         }}>
                             Logout
                         </Button>
-
                         <Button variant="contained" onClick={handleProfile} sx={{
                             backgroundColor: "#1C8E85",
                             '&:hover': {

@@ -2,139 +2,195 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import localforage from 'localforage';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Typography,
-  Container,
-  Link,
-  Grid,
-  Avatar,
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import { signupSchema } from '../../utils/schema/LoginSignupSchema';
 import { UserData } from '../../utils/Interface/types';
 import CommonController from '../../components/commonComponent/commonController';
-import CommonButton from '../../components/commonComponent/commonButton';
+import './LoginForm.css';
 
 const SignupForm = () => {
-  const navigate = useNavigate();
-  const [submitting, setSubmitting] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { handleSubmit, control, formState: { errors } } = useForm({
-    resolver: yupResolver(signupSchema),
-  });
+    const navigate = useNavigate();
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
-  const onSubmit = async (data: UserData) => {
-    setSubmitting(true);
-    setLoading(true);
-    setTimeout(async () => {
-      try {
-        // Fetch existing user data array from localforage or initialize an empty array
-        let users: UserData[] = await localforage.getItem('users') || [];
+    const { handleSubmit, control, formState: { errors } } = useForm({
+        resolver: yupResolver(signupSchema),
+    });
 
-        // Generate ID based on array length
-        const id = (users.length + 1).toString(); // You can use a UUID library for more robust IDs
+    const handleSignUpClick = () => {
+        navigate('/login');
+    };
 
-        // Add ID to user data
-        const userDataWithId: UserData = {
-          ...data,
-          id,
-          budget: [],
-          transaction: [],
-          expenses: []
-        };
+    const onSubmit = async (data: UserData) => {
+        setSubmitting(true);
+        setTimeout(async () => {
+            try {
+                const users: UserData[] = await localforage.getItem<UserData[]>('users') || [];
+                const userExists = users.find(u => u.email === data.email);
 
-        // Add new user data to the array
-        users.push(userDataWithId);
+                if (!userExists) {
+                    const id = (users.length + 1).toString();
+                    const userDataWithId: UserData = {
+                        ...data,
+                        id,
+                        budget: [],
+                        transaction: [],
+                        expenses: []
+                    };
+                    users.push(userDataWithId);
+                    await localforage.setItem('users', users);
+                    setSnackbarMessage('Signup Successful!');
+                    setSnackbarSeverity('success');
+                    setSnackbarOpen(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1500);
+                } else {
+                    setError('User already exists');
+                    setSnackbarMessage('User already exists');
+                    setSnackbarSeverity('error');
+                    setSnackbarOpen(true);
+                }
+            } catch (error) {
+                console.error('Error saving user data:', error);
+                setError('Error saving user data. Please try again.');
+                setSnackbarMessage('Error saving user data. Please try again.');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
+            } finally {
+                setSubmitting(false);
+            }
+        }, 1000);
+    };
 
-        // Store the updated array back in localforage
-        await localforage.setItem('users', users);
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
 
-        alert('Signup Successful!');
-        navigate("/login");
-      } catch (error) {
-        console.error('Error storing data:', error);
-      } finally {
-        setSubmitting(false);
-        setLoading(false);
-      }
-    },1000)
-  };
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <Card sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 3 }}>
-        <Avatar sx={{ m: 1, bgcolor: '#1C8E85' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <CardHeader
-          title={
-            <Typography variant="h5" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>
-              Create an account
-            </Typography>
-          }
-        />
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', marginTop: 1 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <CommonController
-                  name="name"
-                  control={control}
-                  label="Full Name"
-                  type="text"
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CommonController
-                  name="email"
-                  control={control}
-                  label="Email"
-                  type="email"
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CommonController
-                  name="password"
-                  control={control}
-                  label="Password"
-                  type="password"
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                />
-              </Grid>
-            </Grid>
-            <CardActions style={{ marginTop: '16px' }}>
-              <CommonButton
-                type="submit"
-                disabled={submitting}
-                loading={loading}
-              >
-                {submitting ? 'Submitting...' : 'Sign up'}
-              </CommonButton>
-            </CardActions>
-          </form>
-        </CardContent>
-        <CardContent>
-          <Typography variant="body2">
-            Already have an account?{' '}
-            <Link href="/login" sx={{ color: "#1C8E85" }}>
-              Sign in
-            </Link>
-          </Typography>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+    return (
+        <div className='mains'>
+            <div className="background">
+                <div className="shape"></div>
+                <div className="shape"></div>
+                <Container component="main" maxWidth="xs" sx={{ marginTop: "30px" }}>
+                    <Card sx={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.13)', borderRadius: '10px', boxShadow: '0 0 40px rgba(8, 7, 16, 0.6)', padding: '10px 15px', border: '2px solid rgba(255, 255, 255, 0.1)' }}>
+                        <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <Avatar sx={{ bgcolor: '#1C8E85' }}>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography component="h1" variant="h5" sx={{ fontSize: '32px', fontWeight: 500, lineHeight: '42px', textAlign: 'center', color: '#ffffff', mt: 2 }}>
+                                Sign Up Here
+                            </Typography>
+                            <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '30px', width: '100%' }}>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={12}>
+                                        <CommonController
+                                            name="name"
+                                            control={control}
+                                            label="Full Name"
+                                            placeholder="Full Name"
+                                            error={!!errors.name}
+                                            helperText={errors.name?.message}
+                                            InputProps={{
+                                                style: { color: '#ffffff' },
+                                                sx: { backgroundColor: 'grey', borderRadius: 3 }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#ffffff' }
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <CommonController
+                                            name="email"
+                                            control={control}
+                                            label="Email"
+                                            placeholder="Email"
+                                            error={!!errors.email}
+                                            helperText={errors.email?.message}
+                                            InputProps={{
+                                                style: { color: '#ffffff' },
+                                                sx: { backgroundColor: 'grey', borderRadius: 3 }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#ffffff' }
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <CommonController
+                                            name="password"
+                                            control={control}
+                                            label="Password"
+                                            type="password"
+                                            placeholder="Password"
+                                            error={!!errors.password}
+                                            helperText={errors.password?.message}
+                                            InputProps={{
+                                                style: { color: '#ffffff' },
+                                                sx: { backgroundColor: 'grey', borderRadius: 3 }
+                                            }}
+                                            InputLabelProps={{
+                                                style: { color: '#ffffff' }
+                                            }}
+                                        />
+                                    </Grid>
+                                    {error && (
+                                        <Grid item xs={12}>
+                                            <Typography color="error">{error}</Typography>
+                                        </Grid>
+                                    )}
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={submitting}
+                                    sx={{ marginTop: '30px', backgroundColor: '#ffffff', color: '#080710', padding: '6px 0', fontSize: '18px', fontWeight: 600, borderRadius: '5px', cursor: 'pointer' }}
+                                >
+                                    {submitting ? 'Submitting...' : 'Sign Up'}
+                                </Button>
+                                <Typography sx={{ mt: 2, color: '#ffffff' }}>
+                                    Already have an account?{' '}
+                                    <Typography
+                                        component="span"
+                                        sx={{ color: "#1C8E85", cursor: 'pointer' }}
+                                        onClick={handleSignUpClick}
+                                    >
+                                        Sign In
+                                    </Typography>
+                                </Typography>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
+            </div>
+        </div>
+    );
 };
 
 export default SignupForm;

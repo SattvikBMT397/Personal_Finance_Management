@@ -278,6 +278,7 @@ input[type="password"] {
   border-radius: 2px;
   margin: 4px 0;
   border: none;
+
   outline: none;
 }
 
@@ -768,4 +769,6 @@ input:focus {
     justify-content: center;
   }
 }
+
+
 

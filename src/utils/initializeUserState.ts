@@ -1,15 +1,17 @@
-import localforage from "localforage";
+
 import { updateUser } from "../redux/authSlice";
 import { UserData } from "./Interface/types";
 
 const initializeUserState = async (dispatch: any) => {
     try {
-        const storedUser = await localforage.getItem<UserData>('currentUser');
+        const storedUser = await sessionStorage.getItem('currentUser');
         if (storedUser) {
-            dispatch(updateUser(storedUser)); // Update Redux state with stored user
-        } 
+            const userData: UserData = JSON.parse(storedUser);
+            dispatch(updateUser(userData));
+        }
     } catch (error) {
-        console.error('Error initializing user state from localforage:', error);
+        console.error('Error initializing user state from sessionStorage:', error);
     }
 };
-export default initializeUserState
+
+export default initializeUserState;

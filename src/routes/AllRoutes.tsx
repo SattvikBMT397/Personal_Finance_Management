@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import SignupForm from '../pages/User/SignupForm'
 import LoginForm from '../pages/User/LoginForm'
 import ProfileForm from '../pages/Profile/ProfileForm'
@@ -8,7 +8,7 @@ import OurTeams from '../components/OurTeams'
 import Dashboard from '../pages/Dashboard/Dashboard'
 import Budget from '../pages/Budget/Budget'
 import AddTransaction from '../pages/Transaction/AddTransaction'
-
+import TransactionHistory from '../pages/Transaction/TransactionHistory'
 const AllRoutes = () => {
   return (
 <>
@@ -23,6 +23,7 @@ const AllRoutes = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add-budget" element={<Budget />} />
           <Route path="/add-transaction" element={<AddTransaction />} />
+          <Route path="/transaction" element={<TransactionHistory/>}/>
     </Routes>
 </Router>
 </>

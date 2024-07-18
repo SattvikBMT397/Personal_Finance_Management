@@ -8,14 +8,20 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import background from '../../components/Logo/bg.jpg';
-import { useDispatch } from 'react-redux';
+import background from '../../components/Logo/bb.jpg';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTranscation } from '../../redux/authSlice';
+import { RootState } from '../../redux/store';
+import CommonSidebar from '../../components/commonComponent/commonSidebar';
+import { Expense } from '../../utils/Interface/types';
+import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const theme = createTheme({
   palette: {
@@ -48,12 +54,12 @@ const FullWidthBackground = styled('div')({
   width: '100%',
   height: '100%',
   backgroundImage: `url(${background})`,
-  backgroundSize: 'cover',
+  backgroundSize: 'contain',
   backgroundPosition: 'center',
   zIndex: -1,
 });
 
-const StyledContainer = styled(Container)(({ theme }) => ({
+const FormContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -62,9 +68,12 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   width: '50%',
+  marginTop: "1.5rem",
   maxWidth: '600px',
   height: '40%',
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+
+  backgroundColor: 'rgba(255, 255, 255, 255)',
+  border: '1px solid black',
   zIndex: 1,
   [theme.breakpoints.down('sm')]: {
     width: '90%',
@@ -72,10 +81,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
+  padding: theme.spacing(2),
   marginTop: theme.spacing(3),
   width: '100%',
-  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  backgroundColor: 'rgba(255, 255, 255, 255)',
   borderRadius: theme.shape.borderRadius,
 }));
 
@@ -85,11 +94,20 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   color: '#000',
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  backgroundColor: "#1C8E85",
+const StyledButton = styled(Button)(({ theme, disabled }) => ({
+  backgroundColor: disabled ? theme.palette.grey[400] : '#1C8E85',
   '&:hover': {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: disabled ? theme.palette.grey[400] : '#2ac4b8',
   },
+}));
+
+const SidebarContainer = styled('div')(({ theme }) => ({
+  position: 'fixed',
+  top: '-1px',
+  left: "1rem",
+  backgroundColor: '#fff',
+  padding: theme.spacing(1),
+  zIndex: "5"
 }));
 
 const categories = {
@@ -100,6 +118,7 @@ const categories = {
 type CategoryType = keyof typeof categories;
 
 const AddTransaction = () => {
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch();
   const [category, setCategory] = React.useState('');
   const [type, setType] = React.useState<CategoryType>('expense');
@@ -107,6 +126,14 @@ const AddTransaction = () => {
   const [date, setDate] = React.useState('');
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'error'>('success');
+  const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
+
+  const expenseTransactions = transactions.filter((transaction: Expense) => transaction.type === 'expense');
+  const totalExpenses = expenseTransactions.reduce((acc, expense) => acc + (expense.cost || 0), 0);
+  const incomeTransactions = currentUser?.transaction?.filter(transaction => transaction.type === 'income') || [];
+  const totalIncome = incomeTransactions.reduce((acc, transaction) => acc + transaction.cost, 0);
+  const result = (totalIncome - totalExpenses).toFixed(2);
 
   const handleCategoryChange = (event: SelectChangeEvent<string>) => {
     setCategory(event.target.value as string);
@@ -114,7 +141,7 @@ const AddTransaction = () => {
 
   const handleTypeChange = (event: SelectChangeEvent<string>) => {
     setType(event.target.value as CategoryType);
-    setCategory(''); 
+    setCategory('');
   };
 
   const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,19 +152,22 @@ const AddTransaction = () => {
     setDate(event.target.value);
   };
 
-  const handleSubmit= () => {
+  const handleSubmit = () => {
+    if (!currentUser) {
+      setSnackbarMessage('Please login to add a transaction.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
     const transaction = {
       type,
       category,
-      cost: parseFloat(cost), // Convert cost to a number
-      date: new Date(date), // Convert date to a Date object
+      cost: parseFloat(cost),
+      date: new Date(date),
     };
-
-    // Dispatch the addTranscation action
     dispatch(addTranscation(transaction));
-
-    // Show snackbar message
     setSnackbarMessage('Transaction added successfully!');
+    setSnackbarSeverity('success');
     setSnackbarOpen(true);
   };
 
@@ -145,78 +175,109 @@ const AddTransaction = () => {
     setSnackbarOpen(false);
   };
 
+  const LowBalance = ({ balance }: { balance: number }) => {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginBottom: '6px' }}>
+        {balance < 0 ? (
+          <>
+            <WarningIcon sx={{ color: 'red', marginRight: '5px' }} />
+            <Typography variant="body1" sx={{ color: 'red' }}>
+              Low Balance
+            </Typography>
+          </>
+        ) : (
+          <>
+            <CheckCircleIcon sx={{ color: 'green', marginRight: '5px' }} />
+            <Typography variant="body1" sx={{ color: 'green' }}>
+              Sufficient Balance
+            </Typography>
+          </>
+        )}
+      </Box>
+    );
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-      <FullWidthBackground />
-      <StyledContainer>
-        <StyledTypography variant="h4" gutterBottom>
-          Add Transaction
-        </StyledTypography>
-        <StyledTypography variant="h6" gutterBottom>
-          How Much?
-        </StyledTypography>
-        <StyledTypography variant="h5" gutterBottom>
-          $0.00 {/* Replace this with your logic to show total amount */}
-        </StyledTypography>
-        <StyledPaper elevation={3}>
-          <InputLabel>Type</InputLabel>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={type} onChange={handleTypeChange}>
-              <MenuItem value="expense">Expense</MenuItem>
-              <MenuItem value="income">Income</MenuItem>
-            </Select>
-          </FormControl>
-          <InputLabel>Category</InputLabel>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Select value={category} onChange={handleCategoryChange}>
-              {categories[type].map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Cost"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            type="number"
-            value={cost}
-            onChange={handleCostChange}
-          />
-          <TextField
-            label="Date"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={date}
-            onChange={handleDateChange}
-          />
-          <StyledButton
-            variant="contained"
-            onClick={handleSubmit}
-            sx={{ mt: 2, color: 'white', width: "100%" }}
-          >
-            Submit
-          </StyledButton>
-        </StyledPaper>
-      </StyledContainer>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <FullWidthBackground />
+        <SidebarContainer>
+          <CommonSidebar />
+        </SidebarContainer>
+
+        <FormContainer>
+          <StyledTypography variant="h4" gutterBottom>
+            💰Add Transaction
+          </StyledTypography>
+          <StyledTypography variant="h6" gutterBottom>
+            How Much?
+          </StyledTypography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <StyledTypography variant="h5" gutterBottom>
+              ₹{result}
+            </StyledTypography>
+            <LowBalance balance={Number(result)} />
+          </Box>
+          <StyledPaper elevation={3}>
+            <InputLabel>Type</InputLabel>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <Select value={type} onChange={handleTypeChange}>
+                <MenuItem value="expense">Expense</MenuItem>
+                <MenuItem value="income">Income</MenuItem>
+              </Select>
+            </FormControl>
+            <InputLabel>Category</InputLabel>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <Select value={category} onChange={handleCategoryChange}>
+                {categories[type].map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              label="Cost"
+              variant="outlined"
+              fullWidth
+              sx={{ mb: 2 }}
+              type="number"
+              value={cost}
+              onChange={handleCostChange}
+            />
+            <TextField
+              label="Date"
+              variant="outlined"
+              fullWidth
+              sx={{ mb: 2 }}
+              type="date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={date}
+              onChange={handleDateChange}
+            />
+            <StyledButton
+              variant="contained"
+              onClick={handleSubmit}
+              sx={{ mt: 2, color: 'white', width: '100%' }}
+            >
+              Submit
+            </StyledButton>
+          </StyledPaper>
+        </FormContainer>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%', }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </ThemeProvider>
+    </>
   );
 };
 

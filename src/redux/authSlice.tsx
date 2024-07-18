@@ -17,30 +17,35 @@ const userSlice = createSlice({
     reducers: {
         login: (state, action: PayloadAction<UserData>) => {
             state.currentUser = action.payload;
-            localforage.setItem('currentUser', action.payload); 
+            sessionStorage.setItem('currentUser', JSON.stringify(action.payload));
         },
         logout: (state) => {
             state.currentUser = null;
-            localforage.removeItem('currentUser'); 
+            sessionStorage.removeItem('currentUser'); 
         },
         updateUser: (state, action: PayloadAction<UserData>) => {
             state.currentUser = action.payload;
         },
         addBudget: (state, action: PayloadAction<{ category: string; amount: string }>) => {
-            if (state.currentUser) {
+            const { category, amount } = action.payload;
+            if (state.currentUser && state.currentUser.budget) {
 
                 const newBudget = state.currentUser.budget ? [...state.currentUser.budget] : [];
 
-                
-                newBudget.push(action.payload);
+                const existingIndex = newBudget.findIndex(item => item.category === category);
+                if (existingIndex !== -1) {
+                    // Category already exists, update the amount
+                    newBudget[existingIndex].amount = amount;
+                } else {
+                    newBudget.push({category, amount});
+                }
 
                 state.currentUser = {
                     ...state.currentUser,
                     budget: newBudget,
                 };
 
-                // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Save updated users to localforage or wherever your users are stored
                 updateBudget(state.currentUser);
             }
@@ -59,7 +64,7 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Update users in localforage
                 updateBudget(state.currentUser);
             }
@@ -74,7 +79,7 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Update users in localforage
                 updateBudget(state.currentUser);
             }
@@ -94,12 +99,20 @@ const userSlice = createSlice({
                 };
 
                 // Save updated currentUser to localforage
-                localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
                 // Save updated users to localforage or wherever your users are stored
                 updateTransaction(state.currentUser);
             }
 
         },
+        deleteTransaction: (state, action: PayloadAction<number>) => {
+            if (state.currentUser && state.currentUser.transaction) {
+              const updatedTransactions = state.currentUser.transaction.filter((_, index) => index !== action.payload);
+              state.currentUser = { ...state.currentUser, transaction: updatedTransactions };
+              localforage.setItem('currentUser', state.currentUser);
+              updateTransaction(state.currentUser);
+            }
+          },
         
     },
 });
@@ -168,7 +181,7 @@ const updateTransaction = (updatedUser: UserData) => {
         });
 };
 
-export const { login, logout, addBudget, updateUser, addTranscation, editBudget,deleteBudget } = userSlice.actions;
+export const { login, logout, addBudget, updateUser, addTranscation,deleteTransaction, editBudget,deleteBudget } = userSlice.actions;
 
 
 export default userSlice.reducer;
