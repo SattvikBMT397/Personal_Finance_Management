@@ -8,17 +8,17 @@ const ExpensesChart: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const chartRef = useRef<Chart | null>(null);
 
-    // Select transactions from the Redux store
+   
     const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
 
-    // Filter out only the transactions of type 'expense'
+   
     const expenseTransactions = transactions.filter((transaction: Expense) => transaction.type === 'expense');
 
     const totalExpenses = expenseTransactions.reduce((acc, expense) => acc + (expense.cost || 0), 0);
 
     useEffect(() => {
         if (canvasRef.current) {
-            // Destroy the previous chart instance if it exists
+        
             if (chartRef.current) {
                 chartRef.current.destroy();
             }
@@ -36,7 +36,6 @@ const ExpensesChart: React.FC = () => {
             const categories = aggregatedExpenses.map(expense => expense.category);
             const amounts = aggregatedExpenses.map(expense => expense.cost);
 
-            // Create a new chart instance and store it in the ref
             chartRef.current = new Chart(canvasRef.current, {
                 type: 'line',
                 data: {

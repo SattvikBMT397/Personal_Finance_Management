@@ -1,14 +1,11 @@
-import { useState } from 'react';
+import  { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import localforage from 'localforage';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import {
+    Avatar, Button, Card, CardContent, Container, Grid, Typography,
+    Snackbar, Alert
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
@@ -22,14 +19,19 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
     const dispatch = useDispatch();
 
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema),
     });
+
     const handleSignUpClick = () => {
         navigate('/signup');
     };
+
     const onSubmit = async (data: UserData) => {
         setSubmitting(true);
         setTimeout(async () => {
@@ -40,22 +42,36 @@ const LoginForm = () => {
                 if (authenticated) {
                     dispatch(login(authenticated));
                     sessionStorage.setItem('currentUser', JSON.stringify(authenticated));
-                    navigate("/dashboard");
+                    setSnackbarMessage('Login successful!');
+                    setSnackbarSeverity('success');
+                    setSnackbarOpen(true);
+                    setTimeout(() => {
+                        navigate("/dashboard");
+                    }, 1500);
                 } else {
                     setError('Invalid Credentials');
-                    console.log(error);
+                    setSnackbarMessage('Invalid credentials. Please try again.');
+                    setSnackbarSeverity('error');
+                    setSnackbarOpen(true);
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setError('Error fetching user data. Please try again.');
+                setSnackbarMessage('Error fetching user data. Please try again.');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
             } finally {
                 setSubmitting(false);
             }
-        }, 1000)
+        }, 1000);
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
 
     return (
-        <div className='mains' >
+        <div className='mains'>
             <div className="background">
                 <div className="shape"></div>
                 <div className="shape"></div>
@@ -130,7 +146,7 @@ const LoginForm = () => {
                                         marginTop: '30px',
                                         backgroundColor: '#ffffff',
                                         color: '#080710',
-                                        padding: '15px 0',
+                                        padding: '6px 0',
                                         fontSize: '18px',
                                         fontWeight: 600,
                                         borderRadius: '5px',
@@ -143,7 +159,6 @@ const LoginForm = () => {
                                 >
                                     {submitting ? 'Logging in...' : 'Log In'}
                                 </Button>
-
                                 <Typography sx={{ mt: 2, color: '#ffffff' }}>
                                     Don't have an account?{' '}
                                     <Typography
@@ -151,13 +166,23 @@ const LoginForm = () => {
                                         sx={{ color: "#1C8E85", cursor: 'pointer' }}
                                         onClick={handleSignUpClick}
                                     >
-                                        Sign In
+                                        Sign Up
                                     </Typography>
                                 </Typography>
                             </form>
                         </CardContent>
                     </Card>
                 </Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
             </div>
         </div>
     );

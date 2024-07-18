@@ -6,12 +6,12 @@ import { RootState } from '../../redux/store';
 const IncomeChart: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const chartRef = useRef<Chart<"doughnut", number[], string> | null>(null);
-    const currentUser = useSelector((state: RootState) => state.auth.currentUser); // Access currentUser from Redux state
+    const currentUser = useSelector((state: RootState) => state.auth.currentUser); 
     const incomeTransactions = currentUser?.transaction?.filter(transaction => transaction.type === 'income') || [];
 
-    // Aggregate income data by category
+   
     const incomeData = incomeTransactions.reduce((acc, transaction) => {
-        const category = transaction.category || 'Other'; // Default to 'Other' if category is undefined
+        const category = transaction.category || 'Other'; 
         if (acc[category]) {
             acc[category] += transaction.cost;
         } else {
@@ -20,16 +20,15 @@ const IncomeChart: React.FC = () => {
         return acc;
     }, {} as { [key: string]: number });
 
-    // Convert aggregated data into arrays for Chart.js
     const labels = Object.keys(incomeData);
     const data = labels.map(label => incomeData[label]);
-    const backgroundColors = ['#4caf50', '#2196f3', '#ff9800', "#1C8E85", "#2ac4b8"]; // Specify colors for each category
+    const backgroundColors = ['#4caf50', '#2196f3', '#ff9800', "#1C8E85", "#2ac4b8"]; 
 
     const totalIncome = data.reduce((acc, income) => acc + income, 0);
 
     useEffect(() => {
         if (canvasRef.current) {
-            // Destroy the previous chart instance if it exists
+          
             if (chartRef.current) {
                 chartRef.current.destroy();
             }
@@ -51,7 +50,7 @@ const IncomeChart: React.FC = () => {
                 chartRef.current.destroy();
             }
         };
-    }, [incomeTransactions]); // Re-render chart when incomeTransactions change
+    }, [incomeTransactions]); 
 
     return (
         <div style={{ height: '400px', width: '100%' }}>
