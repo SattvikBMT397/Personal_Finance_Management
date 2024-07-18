@@ -10,16 +10,21 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import { signupSchema } from '../../utils/schema/LoginSignupSchema';
 import { UserData } from '../../utils/Interface/types';
 import CommonController from '../../components/commonComponent/commonController';
-import './LoginForm.css'; 
+import './LoginForm.css';
 
 const SignupForm = () => {
     const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
     const { handleSubmit, control, formState: { errors } } = useForm({
         resolver: yupResolver(signupSchema),
@@ -47,25 +52,40 @@ const SignupForm = () => {
                     };
                     users.push(userDataWithId);
                     await localforage.setItem('users', users);
-                    alert('Signup Successful!');
-                    navigate("/login");
+                    setSnackbarMessage('Signup Successful!');
+                    setSnackbarSeverity('success');
+                    setSnackbarOpen(true);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1500);
                 } else {
                     setError('User already exists');
+                    setSnackbarMessage('User already exists');
+                    setSnackbarSeverity('error');
+                    setSnackbarOpen(true);
                 }
             } catch (error) {
                 console.error('Error saving user data:', error);
                 setError('Error saving user data. Please try again.');
+                setSnackbarMessage('Error saving user data. Please try again.');
+                setSnackbarSeverity('error');
+                setSnackbarOpen(true);
             } finally {
                 setSubmitting(false);
             }
         }, 1000);
     };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
     return (
         <div className='mains'>
             <div className="background">
                 <div className="shape"></div>
                 <div className="shape"></div>
-                <Container component="main" maxWidth="xs" sx={{marginTop:"30px"}} >
+                <Container component="main" maxWidth="xs" sx={{ marginTop: "30px" }}>
                     <Card sx={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.13)', borderRadius: '10px', boxShadow: '0 0 40px rgba(8, 7, 16, 0.6)', padding: '10px 15px', border: '2px solid rgba(255, 255, 255, 0.1)' }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Avatar sx={{ bgcolor: '#1C8E85' }}>
@@ -140,24 +160,34 @@ const SignupForm = () => {
                                     variant="contained"
                                     color="primary"
                                     disabled={submitting}
-                                    sx={{ marginTop: '30px', backgroundColor: '#ffffff', color: '#080710', padding: '15px 0', fontSize: '18px', fontWeight: 600, borderRadius: '5px', cursor: 'pointer' }}
+                                    sx={{ marginTop: '30px', backgroundColor: '#ffffff', color: '#080710', padding: '6px 0', fontSize: '18px', fontWeight: 600, borderRadius: '5px', cursor: 'pointer' }}
                                 >
                                     {submitting ? 'Submitting...' : 'Sign Up'}
                                 </Button>
                                 <Typography sx={{ mt: 2, color: '#ffffff' }}>
-            Already have an account?{' '}
-            <Typography
-                component="span"
-                sx={{ color: "#1C8E85", cursor: 'pointer' }}
-                onClick={handleSignUpClick}
-            >
-                Sign up
-            </Typography>
-        </Typography>                
+                                    Already have an account?{' '}
+                                    <Typography
+                                        component="span"
+                                        sx={{ color: "#1C8E85", cursor: 'pointer' }}
+                                        onClick={handleSignUpClick}
+                                    >
+                                        Sign In
+                                    </Typography>
+                                </Typography>
                             </form>
                         </CardContent>
                     </Card>
                 </Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
             </div>
         </div>
     );

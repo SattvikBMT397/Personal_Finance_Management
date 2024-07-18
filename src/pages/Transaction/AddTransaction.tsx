@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -18,6 +19,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTranscation } from '../../redux/authSlice';
 import { RootState } from '../../redux/store';
 import CommonSidebar from '../../components/commonComponent/commonSidebar';
+import { Expense } from '../../utils/Interface/types';
+import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const theme = createTheme({
   palette: {
@@ -64,10 +68,10 @@ const FormContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   width: '50%',
-  marginTop:"1.5rem",
+  marginTop: "1.5rem",
   maxWidth: '600px',
   height: '40%',
-  
+
   backgroundColor: 'rgba(255, 255, 255, 255)',
   border: '1px solid black',
   zIndex: 1,
@@ -100,10 +104,10 @@ const StyledButton = styled(Button)(({ theme, disabled }) => ({
 const SidebarContainer = styled('div')(({ theme }) => ({
   position: 'fixed',
   top: '-1px',
-  left:"1rem",
+  left: "1rem",
   backgroundColor: '#fff',
   padding: theme.spacing(1),
-  zIndex:"5"
+  zIndex: "5"
 }));
 
 const categories = {
@@ -123,6 +127,13 @@ const AddTransaction = () => {
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'error'>('success');
+  const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
+
+  const expenseTransactions = transactions.filter((transaction: Expense) => transaction.type === 'expense');
+  const totalExpenses = expenseTransactions.reduce((acc, expense) => acc + (expense.cost || 0), 0);
+  const incomeTransactions = currentUser?.transaction?.filter(transaction => transaction.type === 'income') || [];
+  const totalIncome = incomeTransactions.reduce((acc, transaction) => acc + transaction.cost, 0);
+  const result = (totalIncome - totalExpenses).toFixed(2);
 
   const handleCategoryChange = (event: SelectChangeEvent<string>) => {
     setCategory(event.target.value as string);
@@ -164,6 +175,28 @@ const AddTransaction = () => {
     setSnackbarOpen(false);
   };
 
+  const LowBalance = ({ balance }: { balance: number }) => {
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginBottom: '6px' }}>
+        {balance < 0 ? (
+          <>
+            <WarningIcon sx={{ color: 'red', marginRight: '5px' }} />
+            <Typography variant="body1" sx={{ color: 'red' }}>
+              Low Balance
+            </Typography>
+          </>
+        ) : (
+          <>
+            <CheckCircleIcon sx={{ color: 'green', marginRight: '5px' }} />
+            <Typography variant="body1" sx={{ color: 'green' }}>
+              Sufficient Balance
+            </Typography>
+          </>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -179,9 +212,12 @@ const AddTransaction = () => {
           <StyledTypography variant="h6" gutterBottom>
             How Much?
           </StyledTypography>
-          <StyledTypography variant="h5" gutterBottom>
-            ₹0.00 
-          </StyledTypography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <StyledTypography variant="h5" gutterBottom>
+              ₹{result}
+            </StyledTypography>
+            <LowBalance balance={Number(result)} />
+          </Box>
           <StyledPaper elevation={3}>
             <InputLabel>Type</InputLabel>
             <FormControl fullWidth sx={{ mb: 2 }}>

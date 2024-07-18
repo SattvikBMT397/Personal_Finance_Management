@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
@@ -22,7 +23,6 @@ import { categories } from '../../utils/categories/categories';
 import useBudgetFormState from '../../utils/customHook/useBudgetFromState';
 import useBudgetOperations from '../../utils/customHook/useBudgetOperations';
 import CommonButton from '../../components/commonComponent/commonButton';
-
 const AddToBudgetPage: React.FC = () => {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const userBudget = currentUser?.budget || [];
@@ -30,19 +30,18 @@ const AddToBudgetPage: React.FC = () => {
         category,
         setCategory,
         amount,
+        setAmount,
         editIndex,
         setEditIndex,
         handleAmountChange,
         clearForm,
-    } = useBudgetFormState();
-    const { loading, operationStatus, handleAddBudget, handleEditBudget, handleDeleteBudget, resetOperationStatus } = useBudgetOperations(); // Use custom hook for budget operations
+    } = useBudgetFormState(); // Ensure you get `setAmount` from `useBudgetFormState`
+    const { loading, operationStatus, handleAddBudget, handleEditBudget, handleDeleteBudget, resetOperationStatus } = useBudgetOperations();
     const [openToast, setOpenToast] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState('');
     const [toastSeverity, setToastSeverity] = React.useState<'success' | 'error'>('success');
-
     React.useEffect(() => {
         if (!currentUser) {
-            // User is not logged in, show toast message
             setToastMessage('Please login to access budget functionality.');
             setToastSeverity('error');
             setOpenToast(true);
@@ -57,12 +56,10 @@ const AddToBudgetPage: React.FC = () => {
             setOpenToast(true);
         }
     }, [currentUser, operationStatus]);
-
     const handleToastClose = () => {
         setOpenToast(false);
         resetOperationStatus();
     };
-
     return (
         <>
             <CommonSidebar />
@@ -98,7 +95,6 @@ const AddToBudgetPage: React.FC = () => {
                             {toastMessage}
                         </Alert>
                     </Snackbar>
-
                     <Box
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -115,7 +111,7 @@ const AddToBudgetPage: React.FC = () => {
                         }}
                     >
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontStyle: 'italic', color: '#000' }}>
-                            💰 Add To Wallet
+                        💰Add To Wallet
                         </Typography>
                         <Select
                             value={category}
@@ -146,6 +142,8 @@ const AddToBudgetPage: React.FC = () => {
                             <CommonButton
                                 onClick={() => {
                                     handleEditBudget(editIndex, category, amount);
+                                    setEditIndex(null); // Clear editIndex after editing
+                                    clearForm(); // Clear form fields
                                 }}
                                 disabled={!currentUser || loading}
                                 loading={loading}
@@ -156,7 +154,6 @@ const AddToBudgetPage: React.FC = () => {
                             <CommonButton
                                 onClick={() => {
                                     if (!currentUser) {
-                                        // User is not logged in, show toast message
                                         setToastMessage('Please login to access budget functionality.');
                                         setToastSeverity('error');
                                         setOpenToast(true);
@@ -186,13 +183,17 @@ const AddToBudgetPage: React.FC = () => {
                                             </Grid>
                                             <Grid item>
                                                 <Tooltip title="Edit">
-                                                    <IconButton onClick={() => setEditIndex(index)} disabled={!currentUser}>
+                                                    <IconButton onClick={() => {
+                                                        setEditIndex(index); // Set editIndex on click
+                                                        setCategory(budgetItem.category); // Populate category for editing
+                                                        setAmount(budgetItem.amount); // Populate amount for editing
+                                                    }} disabled={!currentUser}>
                                                         <EditIcon sx={{ color: 'black' }} />
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="Delete">
                                                     <IconButton onClick={() => handleDeleteBudget(index)} disabled={!currentUser}>
-                                                        <DeleteIcon sx={{ color: '#d11a2a' }} />
+                                                        <DeleteIcon sx={{ color: '#D11A2A' }} />
                                                     </IconButton>
                                                 </Tooltip>
                                             </Grid>
@@ -207,5 +208,4 @@ const AddToBudgetPage: React.FC = () => {
         </>
     );
 };
-
 export default AddToBudgetPage;
