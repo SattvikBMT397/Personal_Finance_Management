@@ -178,7 +178,7 @@ const AddTransaction = () => {
   const LowBalance = ({ balance }: { balance: number }) => {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginBottom: '6px' }}>
-        {balance < 0 ? (
+        {balance <=0 ? (
           <>
             <WarningIcon sx={{ color: 'red', marginRight: '5px' }} />
             <Typography variant="body1" sx={{ color: 'red' }}>
