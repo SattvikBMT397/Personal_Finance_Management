@@ -86,7 +86,7 @@ const Home = () => {
             <p> Your Personal Assistant with<div className='innerText'> Tips, Reminders, and Advice</div></p>
           </div>
           <div className='contents2'>
-            <p className='content2text'> Welcome Guy!</p>
+            <p className='content2text'> Welcome Guys!</p>
             <p className='description'>Budget Buddy is here to support you on your journey to financial freedom, offering tips, reminders, and personalized advice along the way.</p>
           </div>
         </div>

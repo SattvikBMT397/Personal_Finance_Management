@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </List>
             {
                 currentUser ? (
-                    <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+                    <div style={{ position: 'absolute', bottom: '70px', left: '20px' }}>
                         <Button variant="contained" onClick={handleLogout} sx={{
                             marginRight: 1,
                             backgroundColor: "#1C8E85",
@@ -137,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         </Button>
                     </div>
                 ) : (
-                    <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+                    <div style={{ position: 'absolute', bottom: '70px', left: '20px' }}>
                         <Button variant="contained" onClick={handleLogin} sx={{
                             backgroundColor: "#1C8E85",
                             '&:hover': {
