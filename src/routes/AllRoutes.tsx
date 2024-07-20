@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard/Dashboard'
 import Budget from '../pages/Budget/Budget'
 import AddTransaction from '../pages/Transaction/AddTransaction'
 import TransactionHistory from '../pages/Transaction/TransactionHistory'
+
 const AllRoutes = () => {
   return (
 <>
