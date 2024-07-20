@@ -1,4 +1,6 @@
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/authSlice';
 import { RootState } from '../../redux/store';
@@ -14,41 +16,33 @@ import EditIcon from '@mui/icons-material/Edit';
 import backgroundImage from '../../components/Logo/bb.jpg';
 import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import Loader from '../../components/commonComponent/commonLoader';
-
-
+import { signupSchema } from '../../utils/schema/LoginSignupSchema';
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
     const [loading, setLoading] = useState(false);
-
     const dispatch = useDispatch();
     const [editing, setEditing] = useState(false);
-    const [formData, setFormData] = useState<UserData | { name: string; email: string; password: string }>({
-        name: user?.name || '',
-        email: user?.email || '',
-        password: user?.password || '',
+
+    const { handleSubmit, control, formState: { errors } } = useForm({
+        resolver: yupResolver(signupSchema),
+        defaultValues: {
+            name: user?.name || '',
+            email: user?.email || '',
+            password: user?.password || '',
+        },
     });
 
+    const onSubmit = (formData: UserData) => {
+        setLoading(true);
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleUpdate = () => {
-        setLoading(true); // Set updating state to true
-
-        // Simulate an asynchronous operation with setTimeout
+       
         setTimeout(() => {
             dispatch(updateUser(formData));
-            setLoading(false); // Set updating state to false after operation completes
             setEditing(false);
-        }, 1000); // Simulating 2 seconds delay
+            setLoading(false);
+        }, 1000);
     };
-
 
     return (
         <>
@@ -64,72 +58,95 @@ const ProfilePage = () => {
                     backgroundPosition: 'center',
                     padding: 2,
                     zIndex: -1,
-
                 }}
             >
-                <Paper sx={{ padding: 8, width: '100%', maxWidth: 600, border:'1px solid black' }}>
+                <Paper sx={{ padding: 8, width: '100%', maxWidth: 600, border: '1px solid black' }}>
                     <Grid container alignItems="center" spacing={2}>
                         <Grid item xs={12} md={3} sx={{ textAlign: 'center' }}>
                             <Avatar alt="User Avatar" src={'https://t4.ftcdn.net/jpg/05/11/55/91/360_F_511559113_UTxNAE1EP40z1qZ8hIzGNrB0LwqwjruK.jpg'} sx={{ width: 100, height: 100 }} />
                         </Grid>
                         <Grid item xs={12} md={9}>
-                            {editing ? (
-                                <div>
-                                    <Typography variant="h5" gutterBottom>Edit Profile</Typography>
-                                    <TextField
-                                        label="Name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <TextField
-                                        label="Email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <TextField
-                                        label="Password"
-                                        name="password"
-                                        type='password'
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 2 }}
-                                    />
-                                    <Button
-                                        onClick={handleUpdate}
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{
-                                            marginRight: 2,
-                                            backgroundColor: '#1C8E85',
-                                            '&:hover': {
-                                                backgroundColor: '#2ac4b8',
-                                            },
-                                        }}
-                                        disabled={loading}
-                                    >
-                                        {loading ? <Loader/> : 'Update'}
-                                    </Button>
-                                    <Button onClick={() => setEditing(false)} sx={{
-                                        backgroundColor: "#d11a2a", color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: '#FF7F7F',
-                                        },
-
-                                    }}>Cancel</Button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <Typography variant="h5" gutterBottom>Profile Details</Typography>
-                                    <Typography variant="body1" gutterBottom><strong>Name:</strong> {user?.name}</Typography>
-                                    <Typography variant="body1" gutterBottom><strong>Email:</strong> {user?.email}</Typography>
-                                    
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                {editing ? (
+                                    <div>
+                                        <Typography variant="h5" gutterBottom>Edit Profile</Typography>
+                                        <Controller
+                                            name="name"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    label="Name"
+                                                    fullWidth
+                                                    sx={{ marginBottom: 2 }}
+                                                    error={!!errors.name}
+                                                    helperText={errors.name?.message}
+                                                />
+                                            )}
+                                        />
+                                        <Controller
+                                            name="email"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    label="Email"
+                                                    fullWidth
+                                                    sx={{ marginBottom: 2 }}
+                                                    error={!!errors.email}
+                                                    helperText={errors.email?.message}
+                                                />
+                                            )}
+                                        />
+                                        <Controller
+                                            name="password"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    label="Password"
+                                                    type="password"
+                                                    fullWidth
+                                                    sx={{ marginBottom: 2 }}
+                                                    error={!!errors.password}
+                                                    helperText={errors.password?.message}
+                                                />
+                                            )}
+                                        />
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            sx={{
+                                                marginRight: 2,
+                                                backgroundColor: '#1C8E85',
+                                                '&:hover': {
+                                                    backgroundColor: '#2ac4b8',
+                                                },
+                                            }}
+                                            disabled={loading}
+                                        >
+                                            {loading ? <Loader /> : 'Update'}
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            onClick={() => setEditing(false)}
+                                            sx={{
+                                                backgroundColor: "#d11a2a",
+                                                color: 'white',
+                                                '&:hover': {
+                                                    backgroundColor: '#FF7F7F',
+                                                },
+                                            }}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <Typography variant="h5" gutterBottom>Profile Details</Typography>
+                                        <Typography variant="body1" gutterBottom><strong>Name:</strong> {user?.name}</Typography>
+                                        <Typography variant="body1" gutterBottom><strong>Email:</strong> {user?.email}</Typography>
                                         <Button
                                             startIcon={<EditIcon />}
                                             onClick={() => setEditing(true)}
@@ -146,8 +163,9 @@ const ProfilePage = () => {
                                         >
                                             {loading ? <Loader /> : 'Edit Profile'}
                                         </Button>
-                                </div>
-                            )}
+                                    </div>
+                                )}
+                            </form>
                         </Grid>
                     </Grid>
                 </Paper>

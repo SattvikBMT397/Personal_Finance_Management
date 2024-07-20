@@ -109,7 +109,7 @@ const userSlice = createSlice({
             if (state.currentUser && state.currentUser.transaction) {
               const updatedTransactions = state.currentUser.transaction.filter((_, index) => index !== action.payload);
               state.currentUser = { ...state.currentUser, transaction: updatedTransactions };
-              localforage.setItem('currentUser', state.currentUser);
+                sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
               updateTransaction(state.currentUser);
             }
           },

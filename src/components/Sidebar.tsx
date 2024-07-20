@@ -48,10 +48,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             variant="temporary"
             anchor="left"
         >
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '20px 0', display: 'block', marginLeft: '30px' }}>
-                <Avatar alt="Logo" src={logo} sx={{ width: '80%', height: 100 }} />
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '30px 0', display: 'block', marginLeft: '40px' }}>
+                <Avatar alt="Logo" src={logo} sx={{ width: '70%', height: 110 }} />
             </Link>
-            <List sx={{ width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <List sx={{ width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop:"20px"}}>
                 <ListItemButton
                     component={Link}
                     to="/dashboard"
@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </List>
             {
                 currentUser ? (
-                    <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+                    <div style={{ position: 'absolute', bottom: '70px', left: '20px' }}>
                         <Button variant="contained" onClick={handleLogout} sx={{
                             marginRight: 1,
                             backgroundColor: "#1C8E85",
@@ -137,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         </Button>
                     </div>
                 ) : (
-                    <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+                    <div style={{ position: 'absolute', bottom: '70px', left: '20px' }}>
                         <Button variant="contained" onClick={handleLogin} sx={{
                             backgroundColor: "#1C8E85",
                             '&:hover': {
