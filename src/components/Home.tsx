@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Typography, Box, AppBar, Toolbar, IconButton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import './Home.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { logout } from '../redux/authSlice';
 import { AccountCircle, ExitToApp, Dashboard } from '@mui/icons-material';
@@ -14,7 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
-
+  
   const handleLogout = () => dispatch(logout());
   const handleDashboard = () => navigate('/dashboard');
 

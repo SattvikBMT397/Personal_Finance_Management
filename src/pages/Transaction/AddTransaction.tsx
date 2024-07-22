@@ -20,8 +20,6 @@ import { addTranscation } from '../../redux/authSlice';
 import { RootState } from '../../redux/store';
 import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import { Expense } from '../../utils/Interface/types';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const theme = createTheme({
   palette: {
     primary: {
@@ -183,27 +181,8 @@ const AddTransaction = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-  const LowBalance = ({ balance }: { balance: number }) => {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginBottom: '6px' }}>
-        {balance <= 0 ? (
-          <>
-            <WarningIcon sx={{ color: 'red', marginRight: '5px' }} />
-            <Typography variant="body1" sx={{ color: 'red' }}>
-              Low Balance
-            </Typography>
-          </>
-        ) : (
-          <>
-            <CheckCircleIcon sx={{ color: 'green', marginRight: '5px' }} />
-            <Typography variant="body1" sx={{ color: 'green' }}>
-              Sufficient Balance
-            </Typography>
-          </>
-        )}
-      </Box>
-    );
-  };
+
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -213,7 +192,8 @@ const AddTransaction = () => {
         </SidebarContainer>
         <FormContainer>
           <StyledTypography variant="h4" gutterBottom>
-            :moneybag:Add Transaction
+
+            Add Transaction
           </StyledTypography>
           <StyledTypography variant="h6" gutterBottom>
             How Much?
@@ -222,7 +202,6 @@ const AddTransaction = () => {
             <StyledTypography variant="h5" gutterBottom>
               ₹{result}
             </StyledTypography>
-            <LowBalance balance={Number(result)} />
           </Box>
           <StyledPaper elevation={3}>
             <InputLabel>Type</InputLabel>
