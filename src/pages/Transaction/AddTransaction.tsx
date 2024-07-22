@@ -167,6 +167,7 @@ const AddTransaction = () => {
         .reduce((acc, expense) => acc + parseFloat(expense.cost.toString()), 0);
       const remainingBudget = budgetItem ? parseFloat(budgetItem.amount) - totalExpenses : 0;
       if (transaction.cost > remainingBudget) {
+         dispatch(addTranscation(transaction));
         setSnackbarMessage('Expense exceeds the remaining budget!');
         setSnackbarSeverity('error');
         setSnackbarOpen(true);
