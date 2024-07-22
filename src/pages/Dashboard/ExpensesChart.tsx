@@ -5,7 +5,6 @@ import { RootState } from '../../redux/store';
 import { Expense } from '../../utils/Interface/types';
 import { Box,Typography } from '@mui/material';
 
-
 const ExpensesChart: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const chartRef = useRef<Chart | null>(null);
@@ -21,7 +20,7 @@ const ExpensesChart: React.FC = () => {
             }
 
 
-            const aggregatedExpenses = expenseTransactions.reduce((acc: Expense[], expense) => {
+            const aggregatedExpenses: Expense[] = expenseTransactions.reduce((acc: Expense[], expense) => {
                 const found = acc.find(item => item.category === expense.category);
                 if (found) {
                     found.cost = (found.cost || 0) + (expense.cost || 0);
@@ -32,7 +31,6 @@ const ExpensesChart: React.FC = () => {
             }, []);
             const categories = aggregatedExpenses.map(expense => expense.category);
             const amounts = aggregatedExpenses.map(expense => expense.cost);
-
             chartRef.current = new Chart(canvasRef.current, {
                 type: 'bar',
                 data: {
@@ -43,6 +41,7 @@ const ExpensesChart: React.FC = () => {
                         borderColor: '#f44336',
                         backgroundColor: 'rgba(244, 67, 54, 0.2)',
                         
+
 
                     }],
                 },
@@ -71,6 +70,7 @@ const ExpensesChart: React.FC = () => {
 
     return (
            <Box sx={{ height: '400px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+
         <canvas style={{ maxHeight: '80%', maxWidth: '80%',marginTop:'3rem'}} ref={canvasRef} />
         <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
             <Typography variant="h6" sx={{mt:'2rem'}}>
@@ -78,7 +78,6 @@ const ExpensesChart: React.FC = () => {
             </Typography>
         </Box>
     </Box>
-
     );
 };
 
