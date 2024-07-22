@@ -3,15 +3,14 @@ import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Expense } from '../../utils/Interface/types';
+import { Box, Typography } from '@mui/material';
 
 const ExpensesChart: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const chartRef = useRef<Chart | null>(null);
 
     const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
-
     const expenseTransactions = transactions.filter((transaction: Expense) => transaction.type === 'expense');
-
     const totalExpenses = expenseTransactions.reduce((acc, expense) => acc + (expense.cost || 0), 0);
 
     useEffect(() => {
@@ -19,6 +18,7 @@ const ExpensesChart: React.FC = () => {
             if (chartRef.current) {
                 chartRef.current.destroy();
             }
+
 
             const aggregatedExpenses = expenseTransactions.reduce((acc: Expense[], expense) => {
                 const found = acc.find(item => item.category === expense.category);
@@ -29,7 +29,6 @@ const ExpensesChart: React.FC = () => {
                 }
                 return acc;
             }, []);
-
             const categories = aggregatedExpenses.map(expense => expense.category);
             const amounts = aggregatedExpenses.map(expense => expense.cost);
 
@@ -45,6 +44,8 @@ const ExpensesChart: React.FC = () => {
                     }],
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             title: {
@@ -74,6 +75,7 @@ const ExpensesChart: React.FC = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 
