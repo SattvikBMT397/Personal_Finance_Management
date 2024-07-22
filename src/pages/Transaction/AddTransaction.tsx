@@ -22,15 +22,14 @@ import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import { Expense } from '../../utils/Interface/types';
 import WarningIcon from '@mui/icons-material/Warning';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#1976D2',
     },
     secondary: {
-      main: '#dc004e',
-      dark: '#9a0036',
+      main: '#DC004E',
+      dark: '#9A0036',
     },
   },
   typography: {
@@ -46,7 +45,6 @@ const theme = createTheme({
     },
   },
 });
-
 const FullWidthBackground = styled('div')({
   position: 'fixed',
   top: 0,
@@ -58,7 +56,6 @@ const FullWidthBackground = styled('div')({
   backgroundPosition: 'center',
   zIndex: -1,
 });
-
 const FormContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -71,7 +68,6 @@ const FormContainer = styled(Container)(({ theme }) => ({
   marginTop: "1.5rem",
   maxWidth: '600px',
   height: '40%',
-
   backgroundColor: 'rgba(255, 255, 255, 255)',
   border: '1px solid black',
   zIndex: 1,
@@ -79,7 +75,6 @@ const FormContainer = styled(Container)(({ theme }) => ({
     width: '90%',
   },
 }));
-
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginTop: theme.spacing(3),
@@ -87,20 +82,17 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: 'rgba(255, 255, 255, 255)',
   borderRadius: theme.shape.borderRadius,
 }));
-
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 'bold',
   marginBottom: theme.spacing(1),
   color: '#000',
 }));
-
 const StyledButton = styled(Button)(({ theme, disabled }) => ({
   backgroundColor: disabled ? theme.palette.grey[400] : '#1C8E85',
   '&:hover': {
-    backgroundColor: disabled ? theme.palette.grey[400] : '#2ac4b8',
+    backgroundColor: disabled ? theme.palette.grey[400] : '#2AC4B8',
   },
 }));
-
 const SidebarContainer = styled('div')(({ theme }) => ({
   position: 'fixed',
   top: '-1px',
@@ -109,14 +101,17 @@ const SidebarContainer = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
   zIndex: "5"
 }));
-
 const categories = {
-  expense: ['Rent', 'Groceries', 'Utilities', 'Transportation', 'Entertainment'] as const,
+  expense: ['Sport', 'Food', 'Clothing', 'Entertainment'] as const,
   income: ['Salary', 'Freelance', 'Investments', 'Gifts', 'Other'] as const,
 };
-
 type CategoryType = keyof typeof categories;
-
+type Transaction = {
+  type: string;
+  category: string;
+  cost: number;
+  date: Date;
+};
 const AddTransaction = () => {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch();
@@ -128,30 +123,26 @@ const AddTransaction = () => {
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'error'>('success');
   const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
-
   const expenseTransactions = transactions.filter((transaction: Expense) => transaction.type === 'expense');
+  const expenses = transactions.filter((transaction: Transaction) => transaction.type === 'expense');
   const totalExpenses = expenseTransactions.reduce((acc, expense) => acc + (expense.cost || 0), 0);
   const incomeTransactions = currentUser?.transaction?.filter(transaction => transaction.type === 'income') || [];
   const totalIncome = incomeTransactions.reduce((acc, transaction) => acc + transaction.cost, 0);
   const result = (totalIncome - totalExpenses).toFixed(2);
-
+  const budgetData = useSelector((state: RootState) => state.auth.currentUser?.budget);
   const handleCategoryChange = (event: SelectChangeEvent<string>) => {
     setCategory(event.target.value as string);
   };
-
   const handleTypeChange = (event: SelectChangeEvent<string>) => {
     setType(event.target.value as CategoryType);
     setCategory('');
   };
-
   const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCost(event.target.value);
   };
-
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
   };
-
   const handleSubmit = () => {
     if (!currentUser) {
       setSnackbarMessage('Please login to add a transaction.');
@@ -165,20 +156,37 @@ const AddTransaction = () => {
       cost: parseFloat(cost),
       date: new Date(date),
     };
+    if (type === 'expense') {
+      if (!budgetData) {
+        setSnackbarMessage('Budget data is unavailable.');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+        return;
+      }
+      const budgetItem = budgetData.find(item => item.category === category);
+      const totalExpenses = expenses
+        .filter(expense => expense.category === category)
+        .reduce((acc, expense) => acc + parseFloat(expense.cost.toString()), 0);
+      const remainingBudget = budgetItem ? parseFloat(budgetItem.amount) - totalExpenses : 0;
+      if (transaction.cost > remainingBudget) {
+        setSnackbarMessage('Expense exceeds the remaining budget!');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+        return;
+      }
+    }
     dispatch(addTranscation(transaction));
     setSnackbarMessage('Transaction added successfully!');
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
   };
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
   const LowBalance = ({ balance }: { balance: number }) => {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginBottom: '6px' }}>
-        {balance <=0 ? (
+        {balance <= 0 ? (
           <>
             <WarningIcon sx={{ color: 'red', marginRight: '5px' }} />
             <Typography variant="body1" sx={{ color: 'red' }}>
@@ -196,7 +204,6 @@ const AddTransaction = () => {
       </Box>
     );
   };
-
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -204,10 +211,9 @@ const AddTransaction = () => {
         <SidebarContainer>
           <CommonSidebar />
         </SidebarContainer>
-
         <FormContainer>
           <StyledTypography variant="h4" gutterBottom>
-            💰Add Transaction
+            :moneybag:Add Transaction
           </StyledTypography>
           <StyledTypography variant="h6" gutterBottom>
             How Much?
@@ -280,5 +286,11 @@ const AddTransaction = () => {
     </>
   );
 };
-
 export default AddTransaction;
+
+
+
+
+
+
+

@@ -46,12 +46,12 @@ const AddToBudgetPage: React.FC = () => {
             setToastSeverity('error');
             setOpenToast(true);
         } else if (operationStatus === 'add') {
-            setToastMessage('Expense added successfully!');
+            setToastMessage('Budget added successfully!');
             setToastSeverity('success');
             setOpenToast(true);
             clearForm();
         } else if (operationStatus === 'delete') {
-            setToastMessage('Expense deleted successfully!');
+            setToastMessage('Budget deleted successfully!');
             setToastSeverity('success');
             setOpenToast(true);
         }

@@ -30,7 +30,7 @@ const ExpensesChart: React.FC = () => {
             const amounts = aggregatedExpenses.map(expense => expense.cost);
 
             chartRef.current = new Chart(canvasRef.current, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: categories,
                     datasets: [{
@@ -38,7 +38,7 @@ const ExpensesChart: React.FC = () => {
                         data: amounts,
                         borderColor: '#f44336',
                         backgroundColor: 'rgba(244, 67, 54, 0.2)',
-                        fill: true,
+                        
                     }],
                 },
                 options: {
