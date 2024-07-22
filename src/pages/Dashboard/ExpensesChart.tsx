@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Expense } from '../../utils/Interface/types';
+import { Box,Typography } from '@mui/material';
 
 
 const ExpensesChart: React.FC = () => {
