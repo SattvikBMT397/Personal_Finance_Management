@@ -1,6 +1,16 @@
 import { Button, Container, Grid, Typography, Box, AppBar, Toolbar, IconButton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useMediaQuery } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import GroupIcon from '@mui/icons-material/Group';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import Images from './Logo/Budget Buddy.png'
+import './Home.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { logout } from '../redux/authSlice';
 import { AccountCircle, ExitToApp, Dashboard } from '@mui/icons-material';
@@ -15,6 +25,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
+  const handleLogin = () => navigate('/login');
+  const handleRegister = () => navigate('/signup');
   const handleLogout = () => dispatch(logout());
   const handleDashboard = () => navigate('/dashboard');
 

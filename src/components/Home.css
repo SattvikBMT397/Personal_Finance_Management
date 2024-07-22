@@ -13,14 +13,12 @@
     to {
         transform: translateY(-10px);
     }
-
 }
 @keyframes slide-in {
   to {
       transform: translateY(-15px);
     }
 
-  /* Ending position */
 }
 
 .brandsBanner>svg {
@@ -68,3 +66,4 @@
 .course:hover {
     transform: translateY(-10px);
 }
+
