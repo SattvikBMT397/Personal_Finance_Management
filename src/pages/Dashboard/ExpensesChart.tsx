@@ -40,7 +40,9 @@ const ExpensesChart: React.FC = () => {
                         label: 'Expenses',
                         data: amounts,
                         borderColor: '#f44336',
-                        backgroundColor: 'rgba(244, 67, 54, 0.2)'
+                        backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                        
+
                     }],
                 },
                 options: {
