@@ -69,14 +69,14 @@ const ExpensesChart: React.FC = () => {
     }, [expenseTransactions]);
 
     return (
-        <div style={{ height: '315px', width: '100%' }}>
-            <canvas style={{ maxHeight: '100%', maxWidth: '100%', marginTop: '100px' }} ref={canvasRef} />
-            <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <h3 style={{ marginTop: '9px', marginLeft: '40px' }}>🧾Total Expenses: ₹{totalExpenses.toFixed(0)}</h3>
-                </div>
-            </div>
-        </div>
+           <Box sx={{ height: '400px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <canvas style={{ maxHeight: '80%', maxWidth: '80%',marginTop:'3rem'}} ref={canvasRef} />
+        <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
+            <Typography variant="h6" sx={{mt:'2rem'}}>
+                :receipt:Total Expenses: ₹{totalExpenses.toFixed(0)}
+            </Typography>
+        </Box>
+    </Box>
 
     );
 };
