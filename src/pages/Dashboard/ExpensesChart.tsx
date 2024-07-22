@@ -34,7 +34,9 @@ const ExpensesChart: React.FC = () => {
             const amounts = aggregatedExpenses.map(expense => expense.cost);
 
             // Generate random colors for each category
-            const colors = categories.map((_,) => {
+
+            const colors = categories.map((_, ) => {
+
                 const r = Math.floor(Math.random() * 256);
                 const g = Math.floor(Math.random() * 256);
                 const b = Math.floor(Math.random() * 256);
