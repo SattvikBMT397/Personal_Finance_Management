@@ -11,6 +11,7 @@ import {
   Box,
   Snackbar,
   Alert,
+  useMediaQuery,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from '@mui/system';
@@ -53,9 +54,9 @@ const FormContainer = styled('form')(({ theme }) => ({
   padding: theme.spacing(3),
   position: 'absolute',
   overflow: 'hidden',
-  width: '50%',
+  width: '80%',
   maxWidth: '600px',
-  height: '40%',
+  height: 'auto',
   backgroundColor: 'rgba(255, 255, 255, 0.9)',
   border: '1px solid black',
   zIndex: 1,
@@ -92,14 +93,6 @@ const SidebarContainer = styled('div')(({ theme }) => ({
   padding: '1rem',
   zIndex: 1000,
   borderRadius: theme.shape.borderRadius,
-}));
-
-const ResponsiveBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  [theme.breakpoints.down('sm')]: { flexDirection: 'column' },
 }));
 
 const incomeSubcategories = [
@@ -141,6 +134,8 @@ const AddTransaction: React.FC = () => {
   const [cost, setCost] = React.useState<number | ''>('');
   const [openSnackbar, setOpenSnackbar] = React.useState<{ open: boolean, message: string, severity: 'success' | 'error' }>({ open: false, message: '', severity: 'error' });
   const dispatch = useDispatch();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleTypeChange = (event: SelectChangeEvent<string>) => {
     setType(event.target.value);
@@ -196,22 +191,38 @@ const AddTransaction: React.FC = () => {
       <SidebarContainer>
         <CommonSidebar />
       </SidebarContainer>
-      <FormContainer onSubmit={handleSubmit}>
+      <FormContainer
+        onSubmit={handleSubmit}
+        style={{
+          width: isSmallScreen ? '90%' : '50%',
+          padding: isSmallScreen ? theme.spacing(2) : theme.spacing(3),
+        }}
+      >
         <StyledTypography variant="h5" gutterBottom>
           Add Transaction
         </StyledTypography>
         <StyledPaper elevation={3}>
-          <ResponsiveBox>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormControl fullWidth margin="normal">
-              <InputLabel>Type</InputLabel>
-              <Select value={type} onChange={handleTypeChange}>
+              <InputLabel> Select Type...</InputLabel>
+              <Select value={type} onChange={handleTypeChange} label="Select Type...">
+                <MenuItem value="">
+                  <em>Select Category...</em>
+                </MenuItem>
                 <MenuItem value="income">Income</MenuItem>
                 <MenuItem value="expense">Expense</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth margin="normal">
-              <InputLabel>Subcategory</InputLabel>
-              <Select value={subcategory} onChange={handleSubcategoryChange}>
+              <InputLabel>Select Category...</InputLabel>
+              <Select
+                value={subcategory}
+                onChange={handleSubcategoryChange}
+                label="Select Category..."
+              >
+                <MenuItem value="">
+                  <em>Select Category...</em>
+                </MenuItem>
                 {currentSubcategories.map((subcat) => (
                   <MenuItem key={subcat.value} value={subcat.value}>
                     {subcat.label}
@@ -226,8 +237,9 @@ const AddTransaction: React.FC = () => {
               fullWidth
               margin="normal"
               type="number"
+              InputLabelProps={{ shrink: true }}
             />
-          </ResponsiveBox>
+          </Box>
         </StyledPaper>
         <StyledButton type="submit" variant="contained" color="primary" sx={{ marginTop: '10px' }}>
           Add Transaction

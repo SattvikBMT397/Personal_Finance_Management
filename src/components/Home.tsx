@@ -101,7 +101,7 @@ const Home = () => {
               <hr style={{ width: '100%', borderTop: '2px solid #1C8E85' }} />
             </Box>
             <img
-              src={ds} // Replace with your dashboard image source
+              src={ds}
               alt="Dashboard"
               style={{ maxWidth: '100%', height: 'auto', marginTop: '20px', marginBottom:"10px" }}
             />
