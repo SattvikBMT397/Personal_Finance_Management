@@ -40,7 +40,7 @@ const FullWidthBackground = styled('div')({
   width: '100%',
   height: '100%',
   backgroundImage: `url(${background})`,
-  backgroundSize: 'cover',
+  backgroundSize: 'contain',
   backgroundPosition: 'center',
   zIndex: -1,
 });
