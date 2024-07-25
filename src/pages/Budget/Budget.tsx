@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -37,11 +37,11 @@ const AddToBudgetPage: React.FC = () => {
         clearForm,
     } = useBudgetFormState();
     const { loading, operationStatus, handleAddBudget, handleEditBudget, handleDeleteBudget, resetOperationStatus } = useBudgetOperations();
-    const [openToast, setOpenToast] = React.useState(false);
-    const [toastMessage, setToastMessage] = React.useState('');
-    const [toastSeverity, setToastSeverity] = React.useState<'success' | 'error'>('success');
+    const [openToast, setOpenToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+    const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success');
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!currentUser) {
             setToastMessage('Please login to access budget functionality.');
             setToastSeverity('error');
@@ -70,6 +70,10 @@ const AddToBudgetPage: React.FC = () => {
             setOpenToast(true);
             return;
         }
+        if (Number(amount) < 0) {
+            setToastMessage('Cannot take negative amount.');
+            setToastSeverity('error');
+        }
 
         handleAddBudget(category, amount);
     };
@@ -81,10 +85,14 @@ const AddToBudgetPage: React.FC = () => {
             setOpenToast(true);
             return;
         }
+        if (Number(amount) < 0) {
+            setToastMessage('Cannot take negative amount.');
+            setToastSeverity('error');
+        }
 
         handleEditBudget(editIndex!, category, amount);
-        setEditIndex(null); // Clear editIndex after editing
-        clearForm(); // Clear form fields
+        setEditIndex(null); 
+        clearForm(); 
     };
 
     return (
@@ -199,9 +207,9 @@ const AddToBudgetPage: React.FC = () => {
                                             <Grid item>
                                                 <Tooltip title="Edit">
                                                     <IconButton onClick={() => {
-                                                        setEditIndex(index); // Set editIndex on click
-                                                        setCategory(budgetItem.category); // Populate category for editing
-                                                        setAmount(budgetItem.amount); // Populate amount for editing
+                                                        setEditIndex(index); 
+                                                        setCategory(budgetItem.category); 
+                                                        setAmount(budgetItem.amount); 
                                                     }} disabled={!currentUser}>
                                                         <EditIcon sx={{ color: 'black' }} />
                                                     </IconButton>

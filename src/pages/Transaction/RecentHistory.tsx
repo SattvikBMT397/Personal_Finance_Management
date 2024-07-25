@@ -40,6 +40,7 @@ const TransactionHistory: React.FC = () => {
     };
 
     return (
+        
         <div style={{ padding: '16px' }}>
          {
             transactions.length===0?(<NoTransactions/>):

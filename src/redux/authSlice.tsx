@@ -33,7 +33,6 @@ const userSlice = createSlice({
 
                 const existingIndex = newBudget.findIndex(item => item.category === category);
                 if (existingIndex !== -1) {
-                    // Category already exists, update the amount
                     newBudget[existingIndex].amount = amount;
                 } else {
                     newBudget.push({ category, amount });
@@ -100,7 +99,7 @@ const userSlice = createSlice({
                 updateTransaction(state.currentUser);
             }
         },
-        updateExpenseTransaction: (state, action: PayloadAction<{ index: number; updatedTransaction: { type: string; category: string; subcategory?: string; cost: number; date: Date } }>) => {
+     updateExpenseTransaction: (state, action: PayloadAction<{ index: number; updatedTransaction: { type: string; category: string; subcategory?: string; cost: number; date: Date } }>) => {
       if (state.currentUser && state.currentUser.transaction) {
         const { index, updatedTransaction } = action.payload;
 

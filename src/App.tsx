@@ -1,10 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-import AllRoutes from './routes/AllRoutes'; 
+import AllRoute from './routes/AllRoute';
+
 
 function App() {
   return (
    
-       <AllRoutes /> 
+    <>
+      <AllRoute/>
+    </> 
   );
 }
 

@@ -34,7 +34,7 @@ const TransactionHistory: React.FC = () => {
 
     return (
 
-        
+       
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <LandingPage/>
 

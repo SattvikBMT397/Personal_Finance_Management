@@ -14,9 +14,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import backgroundImage from '../../components/Logo/bb.jpg';
-import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import Loader from '../../components/commonComponent/commonLoader';
 import { signupSchema } from '../../utils/schema/LoginSignupSchema';
+import LandingPage from '../../components/LandingPage';
 
 const ProfilePage = () => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
@@ -46,7 +46,7 @@ const ProfilePage = () => {
 
     return (
         <>
-            <CommonSidebar />
+            <LandingPage/>
             <Box
                 sx={{
                     display: 'flex',

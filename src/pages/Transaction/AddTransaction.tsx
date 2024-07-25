@@ -157,7 +157,14 @@ const AddTransaction: React.FC = () => {
       setOpenSnackbar({ open: true, message: 'Invalid subcategory.', severity: 'error' });
       return;
     }
-
+    if (type === 'expense' && (!budgetData || budgetData.length === 0)) {
+      setOpenSnackbar({ open: true, message: 'You have not set a budget yet.', severity: 'error' });
+      return;
+    }
+    if (Number(cost) < 0) {
+      setOpenSnackbar({ open: true, message: 'Cost cannot be negative.', severity: 'error' });
+      return;
+    }
     if (type === 'expense' && checkBudgetExceeded(Number(cost))) {
       setOpenSnackbar({ open: true, message: 'Expense exceeds budget for this category.', severity: 'error' });
       dispatch(

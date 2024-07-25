@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconButton, PaletteMode } from '@mui/material';
+import { IconButton, MenuItem, PaletteMode } from '@mui/material';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from "./Logo/logo.png";
@@ -17,6 +16,7 @@ import { RootState } from '../redux/store';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../redux/authSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CommonMenuItem from '../components/commonComponent/commonMenuItem'; 
 
 const logoStyle = {
     width: '160px',
@@ -35,6 +35,11 @@ function AppAppBar({ }: AppAppBarProps) {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const [activeLink, setActiveLink] = React.useState<string>('');
+
+    React.useEffect(() => {
+        setActiveLink(location.pathname);
+    }, [location.pathname]);
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
@@ -47,17 +52,15 @@ function AppAppBar({ }: AppAppBarProps) {
 
     const handleLogout = () => {
         dispatch(logout());
-        navigate('/login')
+        navigate('/login');
     };
 
     const handleProfile = () => {
-        navigate('/profile')
-    }
+        navigate('/profile');
+    };
+
     const handleLogoClick = () => {
         navigate('/');
-    };
-    const isActive = (path: string) => {
-        return location.pathname === `/${path}`;
     };
 
     return (
@@ -102,48 +105,42 @@ function AppAppBar({ }: AppAppBarProps) {
                                 ml: '-18px',
                                 px: 0,
                             }}
-                            
                         >
                             <img
                                 src={logo}
                                 style={logoStyle}
                                 alt="logo of sitemark"
                                 onClick={handleLogoClick}
-                                
                             />
                             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                                <MenuItem
-                                    onClick={() => handleNavigation('dashboard')}
-                                    sx={{ py: '6px', px: '12px', backgroundColor: isActive('dashboard') ? '#f0f0f0' : 'transparent' }}
+                                <CommonMenuItem
+                                    path="dashboard"
+                                    isActive={isActive('dashboard')}
+                                    handleNavigation={handleNavigation}
                                 >
-                                    <Typography variant="body2" color="text.primary">
-                                        Dashboard
-                                    </Typography>
-                                </MenuItem>
-                                <MenuItem
-                                    onClick={() => handleNavigation('add-budget')}
-                                    sx={{ py: '6px', px: '12px', backgroundColor: isActive('add-budget') ? '#f0f0f0' : 'transparent' }}
+                                    Dashboard
+                                </CommonMenuItem>
+                                <CommonMenuItem
+                                    path="add-budget"
+                                    isActive={isActive('add-budget')}
+                                    handleNavigation={handleNavigation}
                                 >
-                                    <Typography variant="body2" color="text.primary">
-                                        Add to Budget
-                                    </Typography>
-                                </MenuItem>
-                                <MenuItem
-                                    onClick={() => handleNavigation('add-transaction')}
-                                    sx={{ py: '6px', px: '12px', backgroundColor: isActive('add-transaction') ? '#f0f0f0' : 'transparent' }}
+                                    Add to Budget
+                                </CommonMenuItem>
+                                <CommonMenuItem
+                                    path="add-transaction"
+                                    isActive={isActive('add-transaction')}
+                                    handleNavigation={handleNavigation}
                                 >
-                                    <Typography variant="body2" color="text.primary">
-                                        Add to Transaction
-                                    </Typography>
-                                </MenuItem>
-                                <MenuItem
-                                    onClick={() => handleNavigation('transaction')}
-                                    sx={{ py: '6px', px: '12px', backgroundColor: isActive('transaction') ? '#f0f0f0' : 'transparent' }}
+                                    Add to Transaction
+                                </CommonMenuItem>
+                                <CommonMenuItem
+                                    path="transaction"
+                                    isActive={isActive('transaction')}
+                                    handleNavigation={handleNavigation}
                                 >
-                                    <Typography variant="body2" color="text.primary">
-                                        Transaction History
-                                    </Typography>
-                                </MenuItem>
+                                    Transaction History
+                                </CommonMenuItem>
                             </Box>
                         </Box>
                         <Box
@@ -153,51 +150,27 @@ function AppAppBar({ }: AppAppBarProps) {
                                 alignItems: 'center',
                             }}
                         >
-
-                            {currentUser ? (
+                            {currentUser &&
                                 <React.Fragment>
                                     <Typography variant="body2" color="text.primary" sx={{ mr: 1 }}>
                                         Hi! {currentUser.name}
                                     </Typography>
                                     <Button
                                         color="inherit"
-                                        
                                         onClick={handleLogout}
                                         sx={{ textTransform: 'none', color: "#1C8E85" }}
                                     >
                                         Logout
                                     </Button>
-
                                     <Button
                                         color="inherit"
-                                        
                                         onClick={handleProfile}
-                                        sx={{ textTransform: 'none', color:"#1C8E85"}}
+                                        sx={{ textTransform: 'none', color: "#1C8E85" }}
                                     >
-                                        Proifle
+                                        Profile
                                     </Button>
                                 </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <Button
-                                        color="primary"
-                                        variant="text"
-                                        size="small"
-                                        component="a"
-                                    >
-                                        Sign in
-                                    </Button>
-                                    <Button
-                                        color="primary"
-                                        variant="contained"
-                                        size="small"
-                                        component="a"
-
-                                    >
-                                        Sign up
-                                    </Button>
-                                </React.Fragment>
-                            )}
+                          }
                         </Box>
                         <Box sx={{ display: { sm: '', md: 'none' } }}>
                             <Button
@@ -226,34 +199,37 @@ function AppAppBar({ }: AppAppBarProps) {
                                             flexGrow: 1,
                                         }}
                                     >
-        
                                     </Box>
-                                    <MenuItem
-                                        onClick={() => handleNavigation('dashboard')}
-                                        sx={{ backgroundColor: isActive('dashboard') ? '#f0f0f0' : 'transparent' }}
+                                    <CommonMenuItem
+                                        path="dashboard"
+                                        isActive={isActive('dashboard')}
+                                        handleNavigation={handleNavigation}
                                     >
                                         Dashboard
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() => handleNavigation('add-budget')}
-                                        sx={{ backgroundColor: isActive('add-budget') ? '#f0f0f0' : 'transparent' }}
+                                    </CommonMenuItem>
+                                    <CommonMenuItem
+                                        path="add-budget"
+                                        isActive={isActive('add-budget')}
+                                        handleNavigation={handleNavigation}
                                     >
                                         Add to Budget
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() => handleNavigation('add-transaction')}
-                                        sx={{ backgroundColor: isActive('add-transaction') ? '#f0f0f0' : 'transparent' }}
+                                    </CommonMenuItem>
+                                    <CommonMenuItem
+                                        path="add-transaction"
+                                        isActive={isActive('add-transaction')}
+                                        handleNavigation={handleNavigation}
                                     >
                                         Add to Transaction
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={() => handleNavigation('transaction')}
-                                        sx={{ backgroundColor: isActive('transaction') ? '#f0f0f0' : 'transparent' }}
+                                    </CommonMenuItem>
+                                    <CommonMenuItem
+                                        path="transaction"
+                                        isActive={isActive('transaction')}
+                                        handleNavigation={handleNavigation}
                                     >
                                         Transaction History
-                                    </MenuItem>
+                                    </CommonMenuItem>
                                     <Divider />
-                                    {currentUser ? (
+                                    {currentUser && 
                                         <MenuItem>
                                             <Typography variant="body2" color="text.primary" sx={{ mr: 1 }}>
                                                 Hi! {currentUser.name}
@@ -265,34 +241,7 @@ function AppAppBar({ }: AppAppBarProps) {
                                                 <AccountCircleIcon />
                                             </IconButton>
                                         </MenuItem>
-                                    ) : (
-                                        <React.Fragment>
-                                            <MenuItem>
-                                                <Button
-                                                    color="primary"
-                                                    variant="contained"
-                                                    component="a"
-                                                    href="/material-ui/getting-started/templates/sign-up/"
-                                                    target="_blank"
-                                                    sx={{ width: '100%' }}
-                                                >
-                                                    Sign up
-                                                </Button>
-                                            </MenuItem>
-                                            <MenuItem>
-                                                <Button
-                                                    color="primary"
-                                                    variant="outlined"
-                                                    component="a"
-                                                    href="/material-ui/getting-started/templates/sign-in/"
-                                                    target="_blank"
-                                                    sx={{ width: '100%' }}
-                                                >
-                                                    Sign in
-                                                </Button>
-                                            </MenuItem>
-                                        </React.Fragment>
-                                    )}
+                                    }
                                 </Box>
                             </Drawer>
                         </Box>
@@ -301,6 +250,10 @@ function AppAppBar({ }: AppAppBarProps) {
             </AppBar>
         </div>
     );
+
+    function isActive(path: string) {
+        return activeLink === `/${path}` ? true : false;
+    }
 }
 
 export default AppAppBar;

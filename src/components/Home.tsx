@@ -1,10 +1,19 @@
-import { Button, Container, Grid, Typography, Box, AppBar, Toolbar, IconButton } from '@mui/material';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { logout } from '../redux/authSlice';
-import { AccountCircle, ExitToApp, Dashboard } from '@mui/icons-material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import ExitToApp from '@mui/icons-material/ExitToApp';
+import Dashboard from '@mui/icons-material/Dashboard';
 import bg from "./Logo/lg.jpg";
 import ds from "./Logo/ds.png";
 import logo from "./Logo/logo.png";
@@ -104,7 +113,7 @@ const Home = () => {
               <hr style={{ width: '100%', borderTop: '2px solid #1C8E85' }} />
             </Box>
             <img
-              src={ds} // Replace with your dashboard image source
+              src={ds} 
               alt="Dashboard"
               style={{ maxWidth: '100%', height: 'auto', marginTop: '20px', marginBottom:"10px" }}
             />
