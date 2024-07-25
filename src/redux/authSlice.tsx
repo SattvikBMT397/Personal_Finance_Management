@@ -100,6 +100,27 @@ const userSlice = createSlice({
                 updateTransaction(state.currentUser);
             }
         },
+        updateExpenseTransaction: (state, action: PayloadAction<{ index: number; updatedTransaction: { type: string; category: string; subcategory?: string; cost: number; date: Date } }>) => {
+      if (state.currentUser && state.currentUser.transaction) {
+        const { index, updatedTransaction } = action.payload;
+
+        // Create a copy of the current transactions array
+        const updatedTransactions = [...state.currentUser.transaction];
+
+        // Update the transaction at the specified index
+        updatedTransactions[index] = updatedTransaction;
+
+        // Update state
+        state.currentUser = {
+          ...state.currentUser,
+          transaction: updatedTransactions,
+        };
+
+        // Update session storage and any other side effects
+        sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+        updateTransaction(state.currentUser);
+      }
+    },
     },
 });
 
