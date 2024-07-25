@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import tinycolor from "tinycolor2"
 import { Box, Typography } from '@mui/material';
 
 const IncomeChart: React.FC = () => {
@@ -22,7 +23,9 @@ const IncomeChart: React.FC = () => {
 
     const labels = Object.keys(incomeData);
     const data = labels.map(label => incomeData[label]);
-    const backgroundColors = ['#4caf50', '#2196f3', '#ff9800', "#1C8E85", "#2ac4b8"]; 
+    const originalColors = ['#4CAF50', '#2196F3', '#FF9800', "#1C8E85", "#2AC4B8"];
+    const backgroundColors = originalColors.map(color => tinycolor(color).lighten(20).toString());
+    
     const totalIncome = data.reduce((acc, income) => acc + income, 0);
 
     useEffect(() => {

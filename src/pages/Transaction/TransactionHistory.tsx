@@ -15,7 +15,7 @@ import Card from '@mui/material/Card';
 import { format } from 'date-fns';
 import { SelectChangeEvent } from '@mui/material/Select';
 import NoTransactions from '../../components/NoTransation';
-import CommonSidebar from '../../components/commonComponent/commonSidebar';
+import LandingPage from '../../components/LandingPage';
 
 const TransactionHistory: React.FC = () => {
     const transactions = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
@@ -36,7 +36,7 @@ const TransactionHistory: React.FC = () => {
 
         
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <CommonSidebar />
+            <LandingPage/>
 
             <div style={{ padding: '16px', width: '100%' }}>
                 <Typography variant="h3" gutterBottom sx={{ textAlign: 'center' }}>

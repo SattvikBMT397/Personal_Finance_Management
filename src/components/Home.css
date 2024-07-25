@@ -9,17 +9,7 @@
     animation: vectorAnimation 1s infinite ease-in-out alternate;
 }
 
-@keyframes vectorAnimation {
-    to {
-        transform: translateY(-10px);
-    }
-}
-@keyframes slide-in {
-  to {
-      transform: translateY(-15px);
-    }
 
-}
 
 .brandsBanner>svg {
     color: white;
@@ -67,3 +57,9 @@
     transform: translateY(-10px);
 }
 
+@media (max-width: 600px) {
+    .logo-img {
+        max-width: 100%;
+        height: auto;
+    }
+}

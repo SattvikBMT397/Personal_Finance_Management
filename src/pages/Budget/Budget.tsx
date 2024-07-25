@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
@@ -18,11 +17,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import backgroundImage from '../../components/Logo/bb.jpg';
 import { RootState } from '../../redux/store';
-import CommonSidebar from '../../components/commonComponent/commonSidebar';
 import { categories } from '../../utils/categories/categories';
 import useBudgetFormState from '../../utils/customHook/useBudgetFromState';
 import useBudgetOperations from '../../utils/customHook/useBudgetOperations';
 import CommonButton from '../../components/commonComponent/commonButton';
+import LandingPage from '../../components/LandingPage';
+
 const AddToBudgetPage: React.FC = () => {
     const currentUser = useSelector((state: RootState) => state.auth.currentUser);
     const userBudget = currentUser?.budget || [];
@@ -35,11 +35,12 @@ const AddToBudgetPage: React.FC = () => {
         setEditIndex,
         handleAmountChange,
         clearForm,
-    } = useBudgetFormState(); // Ensure you get `setAmount` from `useBudgetFormState`
+    } = useBudgetFormState();
     const { loading, operationStatus, handleAddBudget, handleEditBudget, handleDeleteBudget, resetOperationStatus } = useBudgetOperations();
     const [openToast, setOpenToast] = React.useState(false);
     const [toastMessage, setToastMessage] = React.useState('');
     const [toastSeverity, setToastSeverity] = React.useState<'success' | 'error'>('success');
+
     React.useEffect(() => {
         if (!currentUser) {
             setToastMessage('Please login to access budget functionality.');
@@ -56,13 +57,39 @@ const AddToBudgetPage: React.FC = () => {
             setOpenToast(true);
         }
     }, [currentUser, operationStatus]);
+
     const handleToastClose = () => {
         setOpenToast(false);
         resetOperationStatus();
     };
+
+    const handleAddButtonClick = () => {
+        if (!category || !amount) {
+            setToastMessage('Please fill in all fields.');
+            setToastSeverity('error');
+            setOpenToast(true);
+            return;
+        }
+
+        handleAddBudget(category, amount);
+    };
+
+    const handleEditButtonClick = () => {
+        if (!category || !amount) {
+            setToastMessage('Please fill in all fields.');
+            setToastSeverity('error');
+            setOpenToast(true);
+            return;
+        }
+
+        handleEditBudget(editIndex!, category, amount);
+        setEditIndex(null); // Clear editIndex after editing
+        clearForm(); // Clear form fields
+    };
+
     return (
         <>
-            <CommonSidebar />
+            <LandingPage />
             <Box
                 sx={{
                     display: 'flex',
@@ -111,7 +138,7 @@ const AddToBudgetPage: React.FC = () => {
                         }}
                     >
                         <Typography variant="h4" align="center" gutterBottom sx={{ fontStyle: 'italic', color: '#000' }}>
-                        💰Add To Wallet
+                            💰 Add To Wallet
                         </Typography>
                         <Select
                             value={category}
@@ -140,11 +167,7 @@ const AddToBudgetPage: React.FC = () => {
                         />
                         {editIndex !== null ? (
                             <CommonButton
-                                onClick={() => {
-                                    handleEditBudget(editIndex, category, amount);
-                                    setEditIndex(null); // Clear editIndex after editing
-                                    clearForm(); // Clear form fields
-                                }}
+                                onClick={handleEditButtonClick}
                                 disabled={!currentUser || loading}
                                 loading={loading}
                             >
@@ -152,15 +175,7 @@ const AddToBudgetPage: React.FC = () => {
                             </CommonButton>
                         ) : (
                             <CommonButton
-                                onClick={() => {
-                                    if (!currentUser) {
-                                        setToastMessage('Please login to access budget functionality.');
-                                        setToastSeverity('error');
-                                        setOpenToast(true);
-                                    } else {
-                                        handleAddBudget(category, amount);
-                                    }
-                                }}
+                                onClick={handleAddButtonClick}
                                 startIcon={<AddCircleIcon />}
                                 disabled={!currentUser || loading}
                                 loading={loading}
@@ -208,4 +223,5 @@ const AddToBudgetPage: React.FC = () => {
         </>
     );
 };
+
 export default AddToBudgetPage;

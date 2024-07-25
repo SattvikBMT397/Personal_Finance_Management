@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import localforage from 'localforage';
-
 import { UserData } from '../utils/Interface/types';
 
-export interface UserState  {
-    currentUser: UserData | null
+export interface UserState {
+    currentUser: UserData | null;
 }
 
 const initialState: UserState = {
@@ -21,7 +20,7 @@ const userSlice = createSlice({
         },
         logout: (state) => {
             state.currentUser = null;
-            sessionStorage.removeItem('currentUser'); 
+            sessionStorage.removeItem('currentUser');
         },
         updateUser: (state, action: PayloadAction<UserData>) => {
             state.currentUser = action.payload;
@@ -37,7 +36,7 @@ const userSlice = createSlice({
                     // Category already exists, update the amount
                     newBudget[existingIndex].amount = amount;
                 } else {
-                    newBudget.push({category, amount});
+                    newBudget.push({ category, amount });
                 }
 
                 state.currentUser = {
@@ -46,7 +45,6 @@ const userSlice = createSlice({
                 };
 
                 sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-                // Save updated users to localforage or wherever your users are stored
                 updateBudget(state.currentUser);
             }
         },
@@ -63,9 +61,7 @@ const userSlice = createSlice({
                     budget: updatedBudget,
                 };
 
-                // Save updated currentUser to localforage
                 sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-                // Update users in localforage
                 updateBudget(state.currentUser);
             }
         },
@@ -78,19 +74,13 @@ const userSlice = createSlice({
                     budget: updatedBudget,
                 };
 
-                // Save updated currentUser to localforage
                 sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-                // Update users in localforage
                 updateBudget(state.currentUser);
             }
         },
-        addTranscation: (state, action: PayloadAction<{type:string, category: string; cost: number, date:Date }> ) =>{
-             
+        addTransaction: (state, action: PayloadAction<{ type: string; category: string; subcategory?: string; cost: number; date: Date }>) => {
             if (state.currentUser) {
-
                 const newTransaction = state.currentUser.transaction ? [...state.currentUser.transaction] : [];
-
-
                 newTransaction.push(action.payload);
 
                 state.currentUser = {
@@ -98,28 +88,23 @@ const userSlice = createSlice({
                     transaction: newTransaction,
                 };
 
-                // Save updated currentUser to localforage
                 sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-                // Save updated users to localforage or wherever your users are stored
                 updateTransaction(state.currentUser);
             }
-
         },
         deleteTransaction: (state, action: PayloadAction<number>) => {
             if (state.currentUser && state.currentUser.transaction) {
-              const updatedTransactions = state.currentUser.transaction.filter((_, index) => index !== action.payload);
-              state.currentUser = { ...state.currentUser, transaction: updatedTransactions };
+                const updatedTransactions = state.currentUser.transaction.filter((_, index) => index !== action.payload);
+                state.currentUser = { ...state.currentUser, transaction: updatedTransactions };
                 sessionStorage.setItem('currentUser', JSON.stringify(state.currentUser));
-              updateTransaction(state.currentUser);
+                updateTransaction(state.currentUser);
             }
-          },
-        
+        },
     },
 });
 
 // Function to update users in localforage
 const updateBudget = (updatedUser: UserData) => {
-    console.log("ff", updatedUser)
     localforage.getItem<UserData[]>('users')
         .then((users: UserData[] | null) => {
             if (users) {
@@ -129,9 +114,9 @@ const updateBudget = (updatedUser: UserData) => {
                     }
                     return user;
                 });
-                return localforage.setItem('users', updatedUsers); 
+                return localforage.setItem('users', updatedUsers);
             }
-            return null; 
+            return null;
         })
         .then(updatedUsers => {
             if (updatedUsers) {
@@ -145,13 +130,10 @@ const updateBudget = (updatedUser: UserData) => {
             if (err.name === 'DataError') {
                 console.error('DataError occurred: Likely an issue with data integrity or format');
             }
-            
         });
 };
 
-
 const updateTransaction = (updatedUser: UserData) => {
-    console.log("ff", updatedUser)
     localforage.getItem<UserData[]>('users')
         .then((users: UserData[] | null) => {
             if (users) {
@@ -177,11 +159,9 @@ const updateTransaction = (updatedUser: UserData) => {
             if (err.name === 'DataError') {
                 console.error('DataError occurred: Likely an issue with data integrity or format');
             }
-
         });
 };
 
-export const { login, logout, addBudget, updateUser, addTranscation,deleteTransaction, editBudget,deleteBudget } = userSlice.actions;
-
+export const { login, logout, addBudget, updateUser, addTransaction, deleteTransaction, editBudget, deleteBudget } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/Sidebar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import React, { } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IncomeChart from './IncomeChart';
@@ -11,38 +8,23 @@ import TransactionHistory from '../Transaction/RecentHistory';
 import './Dashboard.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import LandingPage from '../../components/LandingPage';
 const Dashboard: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [showMenuIcon, setShowMenuIcon] = useState(false);
+
     const expenses = useSelector((state: RootState) => state.auth.currentUser?.transaction || []);
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
-    useEffect(() => {
-        setShowMenuIcon(!isOpen);
-    }, [isOpen]);
+   
+   
     const convertedExpenses = expenses.map(expense => ({
         ...expense,
         cost: expense.cost,
     }));
     return (
         <Grid container className="dashboard-container">
-            <Grid item xs={isOpen ? 3 : 'auto'}>
-                <Sidebar isOpen={isOpen} onClose={toggleSidebar} />
+            <Grid item>
+                <LandingPage/>
             </Grid>
-            <Grid item xs={isOpen ? 9 : 12} className="dashboard-main">
+            <Grid item  className="dashboard-main">
                 <div className="header">
-                    {showMenuIcon && (
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleSidebar}
-                            edge="start"
-                            sx={{ fontSize: '2rem', padding: '10px' }}
-                        >
-                            <MenuIcon sx={{ fontSize: 'inherit' }} />
-                        </IconButton>
-                    )}
                     <h1 className="dashboard-title">Dashboard</h1>
                 </div>
                 <Grid container spacing={3} className="dashboard-content">

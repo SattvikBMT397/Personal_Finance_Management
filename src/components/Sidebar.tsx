@@ -48,8 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             variant="temporary"
             anchor="left"
         >
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '30px 0', display: 'block', marginLeft: '40px' }}>
-                <Avatar alt="Logo" src={logo} sx={{ width: '70%', height: 110 }} />
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', textAlign: 'center', padding: '30px 0', display: 'block', marginLeft: '20px' }}>
+                <Avatar alt="Logo" src={logo} sx={{ width: '100%', height: 110 }} />
             </Link>
             <List sx={{ width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop:"20px"}}>
                 <ListItemButton

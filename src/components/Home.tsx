@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { logout } from '../redux/authSlice';
 import { AccountCircle, ExitToApp, Dashboard } from '@mui/icons-material';
-import StartIcon from '@mui/icons-material/Star';
 import bg from "./Logo/lg.jpg";
 import ds from "./Logo/ds.png";
 import logo from "./Logo/logo.png";
@@ -21,25 +20,25 @@ const Home = () => {
 
   return (
     <section className='home'>
-      <AppBar position="static" sx={{ backgroundColor: "#1C8E85" }}>
+      <AppBar position="fixed" sx={{ backgroundColor: "white", boxShadow:"none" }}>
         <Toolbar>
-          <img src={logo} alt="Logo" style={{ height: 60, marginRight: 20, width: 80 }} />
+          <img src={logo} alt="Logo" className="logo-img" style={{ height: "auto", width: "13%",  }} />
           <div style={{ flexGrow: 1 }} />
           {currentUser ? (
             <>
-              <IconButton color="inherit" onClick={handleLogout}>
+              <IconButton color="inherit" onClick={handleLogout} sx={{ color:"#1C8E85"}}>
                 <ExitToApp />
               </IconButton>
-              <IconButton color="inherit" onClick={handleDashboard}>
+              <IconButton color="inherit" onClick={handleDashboard} sx={{ color: "#1C8E85" }}>
                 <Dashboard />
               </IconButton>
             </>
           ) : (
             <>
-              <Button component={Link} to="/login" color="inherit" startIcon={<AccountCircle />}>
+                <Button component={Link} to="/login" color="inherit" startIcon={<AccountCircle />} sx={{ color: "#1C8E85", marginRight:"10px" }}>
                 Login
               </Button>
-              <Button component={Link} to="/signup" color="inherit" startIcon={<AccountCircle />}>
+                <Button component={Link} to="/signup" color="inherit" startIcon={<AccountCircle />} sx={{ color: "#1C8E85" }}>
                 Register
               </Button>
             </>
@@ -60,19 +59,23 @@ const Home = () => {
           <Grid item xs={12} md={6}>
             <Box textAlign={['center', 'left']}>
               <Typography variant="h3" gutterBottom style={{ color: '#1C8E85' }}>
-                LEARN FROM THE <span style={{ color: '#3f51b5' }}>Expense Tracker</span>
+                LEARN FROM THE <span style={{ color: '#1C8E85' }}>Expense Tracker</span>
               </Typography>
               <Typography variant="h4" gutterBottom style={{ color: '#757575', marginBottom: '20px' }}>
                 Your Personal Assistant with Tips, Reminders, and Advice
               </Typography>
               <Typography variant="body1" style={{ color: '#757575', marginBottom: '20px' }}>
                 <span style={{ color: '#1C8E85', fontWeight: 'bold' }}>Welcome, everyone!</span><br />
-                Budget Buddy is here to support you on your journey to financial freedom,
-                offering tips, reminders, and personalized advice along the way.
+                Budget Buddy is here to support you on your journey to financial freedom.
               </Typography>
               {!currentUser && (
                 <Link to="/signup" style={{ textDecoration: 'none' }}>
-                  <Button variant="contained" size="large" color="secondary" startIcon={<StartIcon />}>
+                  <Button variant="contained" size="large" color="secondary" sx={{
+                    backgroundColor: "#1C8E85",
+                    '&:hover': {
+                      backgroundColor: '#2ac4b8',
+                    },
+        }}>
                     Get Started
                   </Button>
                 </Link>

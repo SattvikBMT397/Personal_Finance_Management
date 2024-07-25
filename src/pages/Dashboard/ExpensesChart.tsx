@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Expense } from '../../utils/Interface/types';
 import { Box, Typography } from '@mui/material';
+import tinycolor from 'tinycolor2';
 
 
 const ExpensesChart: React.FC = () => {
@@ -35,13 +36,8 @@ const ExpensesChart: React.FC = () => {
 
             // Generate random colors for each category
 
-            const colors = categories.map((_, ) => {
-
-                const r = Math.floor(Math.random() * 256);
-                const g = Math.floor(Math.random() * 256);
-                const b = Math.floor(Math.random() * 256);
-                return `rgba(${r},${g},${b},0.2)`;
-            });
+            const originalColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+            const backgroundColors = originalColors.map(color => tinycolor(color).lighten(20).toString());
 
             chartRef.current = new Chart(canvasRef.current, {
                 type: 'bar',
@@ -51,7 +47,7 @@ const ExpensesChart: React.FC = () => {
                         label: 'Expenses',
                         data: amounts,
                         borderColor: '#f44336',
-                        backgroundColor: colors,
+                        backgroundColor: backgroundColors,
 
                     }],
                 },
@@ -62,7 +58,7 @@ const ExpensesChart: React.FC = () => {
                         x: {
                             title: {
                                 display: true,
-                                text: 'Category',
+                               
                             },
                         },
                         y: {

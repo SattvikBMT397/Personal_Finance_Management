@@ -5,6 +5,7 @@ import { RootState } from '../../redux/store';
 import { BudgetChartProps } from '../../utils/Interface/types';
 import { categories } from '../../utils/categories/categories';
 import { Box, Typography } from '@mui/material';
+import tinycolor from 'tinycolor2';
 const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
@@ -27,15 +28,11 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ expenses }) => {
       });
       const total = budgetData.reduce((acc, budgetItem) => acc + parseFloat(budgetItem.amount), 0);
       setTotalBudget(total);
-      const predefinedColors = [
-        'hsl(0, 100%, 75%)',
-        'hsl(120, 100%, 75%)',
-        'hsl(240, 100%, 75%)',
-        'hsl(230, 100%, 75%)'
-      ];
+      const originalPredefinedColors = ['hsl(0, 100%, 75%)', 'hsl(120, 100%, 75%)', 'hsl(240, 100%, 75%)', 'hsl(230, 100%, 75%)',];
 
 
-      const colors = remainingBudget.map((_, index) => predefinedColors[index % predefinedColors.length]);
+      const lightenedPredefinedColors = originalPredefinedColors.map(color => tinycolor(color).lighten(20).toHslString());
+      const colors = remainingBudget.map((_, index) => lightenedPredefinedColors[index % lightenedPredefinedColors.length]);
       chartRef.current = new Chart(canvasRef.current, {
         type: 'bar',
         data: {
